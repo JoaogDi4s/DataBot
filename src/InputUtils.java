@@ -2,6 +2,9 @@ import java.util.Scanner;
 
 public class InputUtils {
     public static String getInput(Scanner scan) {
-        return scan.nextLine().toLowerCase().trim(); //PASSA PARA LOWERCASE E TIRA ESPAÇO
+        if (scan.hasNextLine()) {
+            return scan.nextLine().toLowerCase().trim();
+        }
+        return ""; // Retorna uma string vazia se não houver entrada
     }
 }

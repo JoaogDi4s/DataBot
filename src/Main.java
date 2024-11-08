@@ -50,7 +50,7 @@ public class Main {
                         continue; // Reinicia o loop ao detectar uma entrada inválida
                 }
 
-                System.out.println("Deseja fazer outra operação? (s/n)");
+                System.out.println(msg.peguntaSair());
                 String respostaContinuar = InputUtils.getInput(scan); // Pergunta se quer continuar
                 
                 if (respostaContinuar.equals("nao") || respostaContinuar.equals("não")) {
