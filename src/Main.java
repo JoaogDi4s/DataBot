@@ -24,7 +24,7 @@ public class Main {
             Casos casos = new Casos();
 
             // INTRODUÇÃO (LOGIN E TUTORIAL)
-            // intro.introducao();
+             intro.introducao();
 
             boolean continuar = true;
             while (continuar) {

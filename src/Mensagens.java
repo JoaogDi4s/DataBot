@@ -41,6 +41,6 @@ public class Mensagens {
 
     // LOOP
     public String peguntaSair(){
-        return "Gostaria de fazer outra consulta?";
+        return "Gostaria de fazer outro tipo de consulta?";
     }
 }   
