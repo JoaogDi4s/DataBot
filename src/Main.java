@@ -1,11 +1,10 @@
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Dados do banco de dados
+        // DADOS DO BD
         String nomeBanco = "databot";
         String usuario = "root";
         String senha = "";
@@ -24,7 +23,7 @@ public class Main {
             Casos casos = new Casos();
 
             // INTRODUÇÃO (LOGIN E TUTORIAL)
-             intro.introducao();
+             //intro.introducao();
 
             boolean continuar = true;
             while (continuar) {
@@ -44,18 +43,23 @@ public class Main {
                     case "cargo":
                         casos.casoCargo(DataBaseUtils.getConnection(nomeBanco, usuario, senha));
                         break;
-
+                    case "sair":
+                        continuar = false;
+                        break;
                     default:
                         System.out.println("Opção inválida. Tente novamente.");
                         continue; // Reinicia o loop ao detectar uma entrada inválida
                 }
 
-                System.out.println(msg.peguntaSair());
-                String respostaContinuar = InputUtils.getInput(scan); // Pergunta se quer continuar
+                if (!resposta0.equals("sair")) {
+                    System.out.println(msg.peguntaSair());
+                    String respostaContinuar = InputUtils.getInput(scan); // Pergunta se quer continuar
                 
-                if (respostaContinuar.equals("nao") || respostaContinuar.equals("não")) {
-                    continuar = false;
+                    if (respostaContinuar.equals("nao") || respostaContinuar.equals("não")) {
+                        continuar = false;
+                    }
                 }
+                
             }
 
             System.out.println("Conexão fechada.");
