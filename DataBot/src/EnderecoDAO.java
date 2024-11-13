@@ -4,21 +4,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EnderecoDAO extends GenericDAO<Endereco> {
+    // INSERT
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO endereco (numero, bairro, cep, rua, complemento) VALUES (?, ?, ?, ?, ?)";
     }
 
+    // UPDATE
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE endereo SET numero = ?, bairro = ?, cep = ?, rua = ?, complemento = ? WHERE cep = ?";
+        return "UPDATE endereco SET numero = ?, bairro = ?, cep = ?, rua = ?, complemento = ? WHERE cep = ?";
     }
 
+    // DELETE
     @Override
     protected String getDeleteQuery() {
         return "DELETE FROM endereco WHERE cep = ?";
     }
 
+    // SELECT
     @Override
     protected String getSelectQuery() {
         return "SELECT * FROM endereco WHERE cep = ?";
@@ -26,27 +30,27 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
 
     @Override
     protected void setParameters(PreparedStatement stmt, Endereco endereco) throws SQLException {
-        // Definindo os parâmetros na ordem correta para a consulta de inserção e atualização
-        stmt.setString(1, endereco.getNumero());   // Nome é o primeiro parâmetro
-        stmt.setString(2, endereco.getBairro());  // Email é o segundo parâmetro
-        stmt.setString(3, endereco.getCep());  // Email é o terceiro parâmetro
-        stmt.setString(4, endereco.getRua());  // Email é o quarto parâmetro
-        stmt.setString(5, endereco.getComplemento());  // Email é o quarto parâmetro
+        // DEFININDO OS PARÂMETROSNA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
+        // ATUALIZAÇÃO
+        stmt.setString(1, endereco.getNumero());
+        stmt.setString(2, endereco.getBairro());
+        stmt.setString(3, endereco.getCep());
+        stmt.setString(4, endereco.getRua());
+        stmt.setString(5, endereco.getComplemento());
     }
 
     @Override
     protected Endereco getEntityFromResultSet(ResultSet rs) throws SQLException {
-        // Mapeando o ResultSet para o objeto Aluno
+        // MAPEANDO RESULTSET PARA OBJETO
         return new Endereco(
-            rs.getString("numero"),
-            rs.getString("bairro"),
-            rs.getString("cep"),
-            rs.getString("rua"),
-            rs.getString("complemento")
-        );
+                rs.getString("numero"),
+                rs.getString("bairro"),
+                rs.getString("cep"),
+                rs.getString("rua"),
+                rs.getString("complemento"));
     }
 
-    // Método para limpar a tabela de setor
+    // LIMPAR A TABELA ENDERECO
     public void limparTabela() {
         String sql = "DELETE FROM endereco";
         Connection conn = null;
@@ -65,7 +69,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         }
     }
 
-    // Método para atualizar um aluno no banco de dados
+    // ATUALIZAR UM ENDERECO NO BD
     public void atualizar(Endereco endereco) {
         String sql = getUpdateQuery();
         Connection conn = null;
@@ -74,11 +78,12 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, endereco.getNumero());   // Nome é o primeiro parâmetro
-            stmt.setString(2, endereco.getBairro());  // Email é o segundo parâmetro
-            stmt.setString(3, endereco.getCep());  // Email é o terceiro parâmetro
-            stmt.setString(4, endereco.getRua());  // Email é o quarto parâmetro
-            stmt.setString(5, endereco.getComplemento());  // Email é o quarto parâmetro
+            stmt.setString(1, endereco.getNumero());
+            stmt.setString(2, endereco.getBairro());
+            stmt.setString(3, endereco.getCep());
+            stmt.setString(4, endereco.getRua());
+            stmt.setString(5, endereco.getComplemento());
+            stmt.setString(6, endereco.getCep()); // PARA WHERE
             stmt.executeUpdate();
             System.out.println("Endereco atualizado com sucesso!");
         } catch (SQLException e) {
@@ -89,7 +94,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         }
     }
 
-    // Método para deletar um aluno pelo email
+    // DELETAR UM ENDERECO PELO CEP
     public void deletar(String cep) {
         String sql = getDeleteQuery();
         Connection conn = null;
@@ -109,7 +114,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         }
     }
 
-    // Método para buscar um aluno pelo email
+    // BUSCAR UM ENDERECO PELO CEP
     public Endereco buscarPorCep(String cep) {
         String sql = getSelectQuery();
         Connection conn = null;
@@ -125,7 +130,6 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
 
             if (rs.next()) {
                 endereco = getEntityFromResultSet(rs);
-                //System.out.println("Setor encontrado: " + setor.getNome() + ", " + setor.getDescricao());
             }
         } catch (SQLException e) {
             e.printStackTrace();

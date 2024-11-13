@@ -3,60 +3,71 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FuncionarioDAO extends GenericDAO<Funcionario>{
+public class FuncionarioDAO extends GenericDAO<Funcionario> {
+    // INSERT
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO funcionario (nome, projetos, cargaHoraria, dataAdmissao, nascimento, cpf_rg, telefone, email, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO funcionario (nome, projetos, carga_horaria, data_admissao, nascimento, cpf, telefone, email, genero, rg, cod_endereco, cod_cargo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
+    // UPDATE
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE funcionario SET nome = ?, projetos = ?, cargaHoraria = ?, dataAdmissao = ?, nascimento = ?, cpfRg = ?, telefone = ?" +
-        "email = ?, genero = ?  WHERE cpf_rg = ?";
-    } 
+        return "UPDATE funcionario SET nome = ?, projetos = ?, carga_horaria = ?, data_admissao = ?, nascimento = ?, cpf = ?, telefone = ?,"
+                +
+                "email = ?, genero = ?, rg = ?, cod_endereco = ?, cod_cargo = ?  WHERE cpf = ?";
+        }
 
+    // DELETE
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM funcionario WHERE cpf_rg = ?";
+        return "DELETE FROM funcionario WHERE cpf = ?";
     }
 
+    // SELECT
     @Override
     protected String getSelectQuery() {
-        return "SELECT * FROM funcionario WHERE cpf_rg = ?";
+        return "SELECT * FROM funcionario WHERE cpf = ?";
     }
 
     @Override
     protected void setParameters(PreparedStatement stmt, Funcionario funcionario) throws SQLException {
-        // Definindo os parâmetros na ordem correta para a consulta de inserção e atualização
-        stmt.setString(1, funcionario.getNome());   // Nome é o primeiro parâmetro
-        stmt.setString(2, funcionario.getProjetos());  // Email é o segundo parâmetro
-        stmt.setString(3, funcionario.getCargaHoraria());  // Email é o terceiro parâmetro
-        stmt.setString(4, funcionario.getDataAdmissao());  // Email é o quarto parâmetro
-        stmt.setString(5, funcionario.getNascimento());  // Email é o quarto parâmetro
-        stmt.setString(6, funcionario.getCpfRg());  // Email é o quarto parâmetro
-        stmt.setString(7, funcionario.getTelefone());  // Email é o quarto parâmetro
-        stmt.setString(8, funcionario.getEmail());  // Email é o quarto parâmetro
-        stmt.setString(9, funcionario.getGenero());  // Email é o quarto parâmetro
-
+        // DEFININDO OS PARÂMETROSNA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
+        // ATUALIZAÇÃO
+        stmt.setString(1, funcionario.getNome());
+        stmt.setString(2, funcionario.getProjetos());
+        stmt.setString(3, funcionario.getCarga_horaria());
+        stmt.setString(4, funcionario.getData_admissao());
+        stmt.setString(5, funcionario.getNascimento());
+        stmt.setString(6, funcionario.getCpf());
+        stmt.setString(7, funcionario.getTelefone());
+        stmt.setString(8, funcionario.getEmail());
+        stmt.setString(9, funcionario.getGenero());
+        stmt.setString(10, funcionario.getRg());
+        stmt.setString(11, funcionario.getCod_endereco());
+        stmt.setString(12, funcionario.getCod_cargo());
     }
 
     @Override
     protected Funcionario getEntityFromResultSet(ResultSet rs) throws SQLException {
-        // Mapeando o ResultSet para o objeto Aluno
+        // MAPEANDO RESULTSET PARA OBJETO
         return new Funcionario(
-            rs.getString("nome"),
-            rs.getString("projetos"),
-            rs.getString("carga_horaria"),
-            rs.getString("data_admissao"),
-            rs.getString("nascimento"),
-            rs.getString("cpf_rg"),
-            rs.getString("telefone"),
-            rs.getString("email"),
-            rs.getString("genero")
-        );
+                rs.getString("nome"),
+                rs.getString("projetos"),
+                rs.getString("carga_horaria"),
+                rs.getString("data_admissao"),
+                rs.getString("nascimento"),
+                rs.getString("cpf"),
+                rs.getString("telefone"),
+                rs.getString("email"),
+                rs.getString("genero"),
+                rs.getString("rg"),
+                rs.getString("cod_endereco"),
+                rs.getString("cod_cargo")
+                );
     }
 
-    // Método para limpar a tabela de setor
+    // LIMPAR A TABELA FUNCIONARIO
     public void limparTabela() {
         String sql = "DELETE FROM funcionario";
         Connection conn = null;
@@ -75,7 +86,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         }
     }
 
-    // Método para atualizar um aluno no banco de dados
+    // ATUALIZAR FUNCIONARIO NO BD
     public void atualizar(Funcionario funcionario) {
         String sql = getUpdateQuery();
         Connection conn = null;
@@ -84,15 +95,19 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, funcionario.getNome());   // Nome é o primeiro parâmetro
-            stmt.setString(2, funcionario.getProjetos());  // Email é o segundo parâmetro
-            stmt.setString(3, funcionario.getCargaHoraria());  // Email é o terceiro parâmetro
-            stmt.setString(4, funcionario.getDataAdmissao());  // Email é o quarto parâmetro
-            stmt.setString(5, funcionario.getNascimento());  // Email é o quarto parâmetro
-            stmt.setString(6, funcionario.getCpfRg());  // Email é o quarto parâmetro
-            stmt.setString(7, funcionario.getTelefone());  // Email é o quarto parâmetro
-            stmt.setString(8, funcionario.getEmail());  // Email é o quarto parâmetro
-            stmt.setString(9, funcionario.getGenero());  // Email é o quarto parâmetro
+            stmt.setString(1, funcionario.getNome());
+            stmt.setString(2, funcionario.getProjetos());
+            stmt.setString(3, funcionario.getCarga_horaria());
+            stmt.setString(4, funcionario.getData_admissao());
+            stmt.setString(5, funcionario.getNascimento());
+            stmt.setString(6, funcionario.getCpf());
+            stmt.setString(7, funcionario.getTelefone());
+            stmt.setString(8, funcionario.getEmail());
+            stmt.setString(9, funcionario.getGenero());
+            stmt.setString(10, funcionario.getRg());
+            stmt.setString(11, funcionario.getCod_endereco());
+            stmt.setString(12, funcionario.getCod_cargo());
+            stmt.setString(13, funcionario.getCpf()); // PARA WHERE
             stmt.executeUpdate();
             System.out.println("funcionario atualizado com sucesso!");
         } catch (SQLException e) {
@@ -103,8 +118,8 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         }
     }
 
-    // Método para deletar um aluno pelo email
-    public void deletar(String nome) {
+    // DELETAR UM FUNCIONARIO PELO CPF
+    public void deletar(String cpf) {
         String sql = getDeleteQuery();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -112,7 +127,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nome);
+            stmt.setString(1, cpf);
             stmt.executeUpdate();
             System.out.println("funcionario deletado com sucesso!");
         } catch (SQLException e) {
@@ -123,8 +138,8 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         }
     }
 
-    // Método para buscar um aluno pelo email
-    public Funcionario buscarPorCpfRg(String cpfRg) {
+    // BUSCAR UM FUNCIONARIO PELO CPF
+    public Funcionario buscarPorCpf(String cpf) {
         String sql = getSelectQuery();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -134,12 +149,11 @@ public class FuncionarioDAO extends GenericDAO<Funcionario>{
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cpfRg);
+            stmt.setString(1, cpf);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 funcionario = getEntityFromResultSet(rs);
-                //System.out.println("Setor encontrado: " + setor.getNome() + ", " + setor.getDescricao());
             }
         } catch (SQLException e) {
             e.printStackTrace();

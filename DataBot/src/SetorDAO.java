@@ -4,21 +4,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SetorDAO extends GenericDAO<Setor> {
+    // INSERT
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO setor (nome, descricao) VALUES (?, ?)";
     }
 
+    // UPDATE
     @Override
     protected String getUpdateQuery() {
         return "UPDATE setor SET nome = ?, descricao = ? WHERE nome = ?";
     }
 
+    // DELETE
     @Override
     protected String getDeleteQuery() {
         return "DELETE FROM setor WHERE nome = ?";
     }
 
+    // SELECT
     @Override
     protected String getSelectQuery() {
         return "SELECT * FROM setor WHERE nome = ?";
@@ -26,21 +30,21 @@ public class SetorDAO extends GenericDAO<Setor> {
 
     @Override
     protected void setParameters(PreparedStatement stmt, Setor setor) throws SQLException {
-        // Definindo os parâmetros na ordem correta para a consulta de inserção e atualização
-        stmt.setString(1, setor.getNome());   // Nome é o primeiro parâmetro
-        stmt.setString(2, setor.getDescricao());  // Email é o segundo parâmetro
+        // DEFININDO OS PARÂMETROSNA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
+        // ATUALIZAÇÃO
+        stmt.setString(1, setor.getNome());
+        stmt.setString(2, setor.getDescricao());
     }
 
     @Override
     protected Setor getEntityFromResultSet(ResultSet rs) throws SQLException {
-        // Mapeando o ResultSet para o objeto Aluno
+        // MAPEANDO RESULTSET PARA OBJETO
         return new Setor(
-            rs.getString("nome"),
-            rs.getString("descricao")
-        );
+                rs.getString("nome"),
+                rs.getString("descricao"));
     }
 
-    // Método para limpar a tabela de setor
+    // LIMPAR A TABELA SETOR
     public void limparTabela() {
         String sql = "DELETE FROM setor";
         Connection conn = null;
@@ -59,17 +63,18 @@ public class SetorDAO extends GenericDAO<Setor> {
         }
     }
 
-    // Método para atualizar um aluno no banco de dados
-    public void atualizar(Setor setor) {
+    // ATUALIZAR UM SETOR NO BD
+    public void atualizar(String nomeAtual, Setor setor) {
         String sql = getUpdateQuery();
         Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
             conn = DatabaseConnection.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, setor.getNome());   // Nome
-            stmt.setString(2, setor.getDescricao());     // Idade
+            stmt = conn.prepareStatement(sql);  
+            stmt.setString(1, setor.getNome());
+            stmt.setString(2, setor.getDescricao());
+            stmt.setString(3, nomeAtual); // PARA WHERE
             stmt.executeUpdate();
             System.out.println("Setor atualizado com sucesso!");
         } catch (SQLException e) {
@@ -80,7 +85,7 @@ public class SetorDAO extends GenericDAO<Setor> {
         }
     }
 
-    // Método para deletar um aluno pelo email
+    // DELETAR UM SETOR PELO NOME
     public void deletar(String nome) {
         String sql = getDeleteQuery();
         Connection conn = null;
@@ -100,7 +105,7 @@ public class SetorDAO extends GenericDAO<Setor> {
         }
     }
 
-    // Método para buscar um aluno pelo email
+    // BUSCAR UM SETOR PELO NOME
     public Setor buscarPorNome(String nome) {
         String sql = getSelectQuery();
         Connection conn = null;
@@ -116,7 +121,6 @@ public class SetorDAO extends GenericDAO<Setor> {
 
             if (rs.next()) {
                 setor = getEntityFromResultSet(rs);
-                //System.out.println("Setor encontrado: " + setor.getNome() + ", " + setor.getDescricao());
             }
         } catch (SQLException e) {
             e.printStackTrace();

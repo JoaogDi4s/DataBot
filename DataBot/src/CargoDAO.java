@@ -4,21 +4,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CargoDAO extends GenericDAO<Cargo> {
+    // INSERT
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO cargo (nome, salarioBase, hierarquia, requisitos) VALUES (?, ?, ?, ?)";
+        return "INSERT INTO cargo (nome, salarioBase, hierarquia, requisitos, cod_setor) VALUES (?, ?, ?, ?, ?)";
     }
 
+    // UPDATE
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE cargo SET nome = ?, salarioBase = ?, hierarquia = ?, requisitos = ? WHERE nome = ?";
+        return "UPDATE cargo SET nome = ?, salarioBase = ?, hierarquia = ?, requisitos = ?, cod_setor = ? WHERE nome = ?";
     }
 
+    // DELETE
     @Override
     protected String getDeleteQuery() {
         return "DELETE FROM cargo WHERE nome = ?";
     }
 
+    // SELECT
     @Override
     protected String getSelectQuery() {
         return "SELECT * FROM cargo WHERE nome = ?";
@@ -26,25 +30,30 @@ public class CargoDAO extends GenericDAO<Cargo> {
 
     @Override
     protected void setParameters(PreparedStatement stmt, Cargo cargo) throws SQLException {
-        // Definindo os parâmetros na ordem correta para a consulta de inserção e atualização
-        stmt.setString(1, cargo.getNome());   // Nome é o primeiro parâmetro
-        stmt.setString(2, cargo.getSalarioBase());  // Email é o segundo parâmetro
-        stmt.setString(3, cargo.getHierarquia());  // Email é o terceiro parâmetro
-        stmt.setString(4, cargo.getRequisitos());  // Email é o quarto parâmetro
+        // DEFININDO OS PARÂMETROSNA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
+        // ATUALIZAÇÃO
+        stmt.setString(1, cargo.getNome());
+        stmt.setString(2, cargo.getSalarioBase());
+        stmt.setString(3, cargo.getHierarquia());
+        stmt.setString(4, cargo.getRequisitos());
+        stmt.setString(5, cargo.getCod_setor());
+
+
     }
 
     @Override
     protected Cargo getEntityFromResultSet(ResultSet rs) throws SQLException {
-        // Mapeando o ResultSet para o objeto Aluno
+        // MAPEANDO RESULTSET PARA OBJETO
         return new Cargo(
-            rs.getString("nome"),
-            rs.getString("salarioBase"),
-            rs.getString("hierarquia"),
-            rs.getString("requisitos")
-        );
+                rs.getString("nome"),
+                rs.getString("salarioBase"),
+                rs.getString("hierarquia"),
+                rs.getString("requisitos"),
+                rs.getString("cod_setor"));
+
     }
 
-    // Método para limpar a tabela de setor
+    // LIMPAR A TABELA CARGO
     public void limparTabela() {
         String sql = "DELETE FROM cargo";
         Connection conn = null;
@@ -63,8 +72,8 @@ public class CargoDAO extends GenericDAO<Cargo> {
         }
     }
 
-     // Método para atualizar um aluno no banco de dados
-     public void atualizar(Cargo cargo) {
+    // ATUALIZAR UM CARGO NO BD
+    public void atualizar(Cargo cargo) {
         String sql = getUpdateQuery();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -72,10 +81,12 @@ public class CargoDAO extends GenericDAO<Cargo> {
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cargo.getNome());   // Nome
-            stmt.setString(2, cargo.getSalarioBase());     // Idade
-            stmt.setString(3, cargo.getHierarquia());     // HIERARQUIA
-            stmt.setString(4, cargo.getRequisitos());     // requisitos
+            stmt.setString(1, cargo.getNome());
+            stmt.setString(2, cargo.getSalarioBase());
+            stmt.setString(3, cargo.getHierarquia());
+            stmt.setString(4, cargo.getRequisitos());
+            stmt.setString(5, cargo.getCod_setor());
+            stmt.setString(6, cargo.getNome()); // PARA WHERE
             stmt.executeUpdate();
             System.out.println("Cargo atualizado com sucesso!");
         } catch (SQLException e) {
@@ -86,7 +97,7 @@ public class CargoDAO extends GenericDAO<Cargo> {
         }
     }
 
-    // Método para deletar um aluno pelo email
+    // DELETAR UM CARGO PELO NOME
     public void deletar(String nome) {
         String sql = getDeleteQuery();
         Connection conn = null;
@@ -106,7 +117,7 @@ public class CargoDAO extends GenericDAO<Cargo> {
         }
     }
 
-    // Método para buscar um aluno pelo email
+    // BUSCAR UM CARGO PELO NOME
     public Cargo buscarPorNome(String nome) {
         String sql = getSelectQuery();
         Connection conn = null;
@@ -122,7 +133,6 @@ public class CargoDAO extends GenericDAO<Cargo> {
 
             if (rs.next()) {
                 cargo = getEntityFromResultSet(rs);
-                //System.out.println("Setor encontrado: " + setor.getNome() + ", " + setor.getDescricao());
             }
         } catch (SQLException e) {
             e.printStackTrace();
