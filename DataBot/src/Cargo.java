@@ -2,14 +2,14 @@ public class Cargo{
     private String nome;
     private String salarioBase;
     private String hierarquia;
-    private String Requisito;
+    private String requisitos;
 
     // CONSTRUTOR
-    public Cargo(String nome, String salarioBase, String hierarquia, String Requisito) {
+    public Cargo(String nome, String salarioBase, String hierarquia, String requisito) {
         this.nome = nome;
         this.salarioBase = salarioBase;
         this.hierarquia = hierarquia;
-        this.Requisito = Requisito;
+        this.requisitos = requisito;
     }
 
     // GETTERS 
@@ -22,7 +22,7 @@ public class Cargo{
     public String getHierarquia() {
         return hierarquia;
     }
-    public String getRequisito(){
-        return Requisito;
+    public String getRequisitos(){
+        return requisitos;
     }
 }
