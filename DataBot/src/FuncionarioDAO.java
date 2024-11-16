@@ -27,7 +27,10 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
     // SELECT
     @Override
     protected String getSelectQuery() {
-        return "SELECT * FROM funcionario WHERE cpf = ?";
+        return "SELECT funcionario.*, endereco.*, cargo.nome as nome_cargo " + "FROM funcionario INNER JOIN " +
+        "endereco ON funcionario.cod_endereco = endereco.cod_endereco INNER JOIN " +
+        "cargo ON funcionario.cod_cargo = cargo.cod_cargo " +
+        "WHERE LOWER(funcionario.nome) LIKE LOWER(?)";
     }
 
     @Override
@@ -138,8 +141,8 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         }
     }
 
-    // BUSCAR UM FUNCIONARIO PELO CPF
-    public Funcionario buscarPorCpf(String cpf) {
+    // BUSCAR UM FUNCIONARIO PELO NOME  
+    public Funcionario buscarPorNome(String nome) {
         String sql = getSelectQuery();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -149,7 +152,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cpf);
+            stmt.setString(1, "%" + nome.toLowerCase() + "%");
             rs = stmt.executeQuery();
 
             if (rs.next()) {

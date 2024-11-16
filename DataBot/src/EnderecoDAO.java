@@ -114,31 +114,32 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         }
     }
 
-    // BUSCAR UM ENDERECO PELO CEP
-    public Endereco buscarPorCep(String cep) {
-        String sql = getSelectQuery();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Endereco endereco = null;
+    // BUSCAR UM ENDERECO PELO CODIGO
+   public Endereco buscarPorCodigo(String cod_edereco) {
+    String sql = "SELECT * FROM endereco WHERE cod_endereco = ?";
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    Endereco endereco = null;
 
-        try {
-            conn = DatabaseConnection.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cep);
-            rs = stmt.executeQuery();
+    try {
+        conn = DatabaseConnection.getConnection();
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, cod_edereco);
+        rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                endereco = getEntityFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseConnection.closeResultSet(rs);
-            DatabaseConnection.closeStatement(stmt);
-            DatabaseConnection.closeConnection(conn);
+        if (rs.next()) {
+            endereco = getEntityFromResultSet(rs);
         }
-
-        return endereco;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        DatabaseConnection.closeResultSet(rs);
+        DatabaseConnection.closeStatement(stmt);
+        DatabaseConnection.closeConnection(conn);
     }
+
+    return endereco;
+}
+
 }

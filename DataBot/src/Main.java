@@ -1,85 +1,405 @@
+import java.util.List;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         SetorDAO setorDAO = new SetorDAO();
         CargoDAO cargoDAO = new CargoDAO();
         FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
         EnderecoDAO enderecoDAO = new EnderecoDAO();
-/* 
-        // SETOR
-            // INSERT
-                Setor novoSetor= new Setor("SetorTeste", "TestandoSetor");
-                setorDAO.salvar(novoSetor);
-                System.out.println("Setor salvo com sucesso!");
-            // UPDATE - PELO NOME DO SETOR
-                Setor setorAtualizado = new Setor("SetorTeste2", "TestandoSetor");
-                setorDAO.atualizar("SetorTeste", setorAtualizado);
-                System.out.println("Setor atualizado com sucesso!");
-            // DELETE - PELO NOME DO SETOR
-                setorDAO.deletar("SetorTeste2");
-            // SELECT - PELO NOME DO SETOR
-                Setor setorBuscado = setorDAO.buscarPorNome("SetorTeste");
-                if (setorBuscado != null) {
-                    System.out.println("Setor encontrado: " + setorBuscado.getDescricao());
+        Introducao intro = new Introducao();
+        Mensagens msg = new Mensagens();
+        Scanner scan = new Scanner(System.in);
+
+        intro.introducao();
+
+        boolean continuar = true;
+        while (continuar) {
+            System.out.println(msg.pergunta0());
+            String resposta0 = InputUtils.getInput(scan);
+
+            switch (resposta0) {
+                case "funcionario":
+                    boolean continuarFuncionario = true;
+                    System.out.println(msg.pergunta1());
+                    String resposta1 = InputUtils.getInput(scan);
+                    Funcionario funcionarioBuscado = funcionarioDAO.buscarPorNome(resposta1);
+
+                    if (funcionarioBuscado != null) {
+                        System.out.println("\n--------------------");
+                        System.out.println("Funcionário encontrado! O que você deseja visualizar?");
+                        System.out.println("1. Nome");
+                        System.out.println("2. Nascimento");
+                        System.out.println("3. CPF");
+                        System.out.println("4. RG");
+                        System.out.println("5. Gênero");
+                        System.out.println("6. Projetos");
+                        System.out.println("7. Telefone");
+                        System.out.println("8. Email");
+                        System.out.println("9. Endereço");
+                        System.out.println("--------------------\n");
+
+                        while (continuarFuncionario) {
+                            System.out.println(
+                                    "Digite as opções que deseja ver (separadas por vírgula, ex: 1, 3, 7) ou 'sair' para encerrar.");
+                            String escolha = InputUtils.getInput(scan);
+
+                            if (escolha.equals("sair")) {
+                                continuarFuncionario = false;
+                                break;
+                            }
+
+                            String[] escolhas = escolha.split(","); // SEPARAR OPÇÕES POR VÍRGULA
+
+                            for (String op : escolhas) {
+                                System.out.println("\n--------------------");
+                                switch (op.trim()) {
+                                    case "nome":
+                                        System.out.println("Nome: " + funcionarioBuscado.getNome());
+                                        break;
+                                    case "nascimento":
+                                        System.out.println("Nascimento: " + funcionarioBuscado.getNascimento());
+                                        break;
+                                    case "cpf":
+                                        System.out.println("CPF: " + funcionarioBuscado.getCpf());
+                                        break;
+                                    case "rg":
+                                        System.out.println("RG: " + funcionarioBuscado.getRg());
+                                        break;
+                                    case "genero":
+                                        System.out.println("Gênero: " + funcionarioBuscado.getGenero());
+                                        break;
+                                    case "projetos":
+                                        System.out.println("Projetos: " + funcionarioBuscado.getProjetos());
+                                        break;
+                                    case "telefone":
+                                        System.out.println("Telefone: " + funcionarioBuscado.getTelefone());
+                                        break;
+                                    case "email":
+                                        System.out.println("Email: " + funcionarioBuscado.getEmail());
+                                        break;
+                                    case "cargo":
+                                        if (funcionarioBuscado.getCod_cargo() != null) {
+                                            Cargo cargoBuscado = cargoDAO
+                                                    .buscarPorCodigo(funcionarioBuscado.getCod_cargo());
+                                            if (cargoBuscado != null) {
+                                                System.out.println("Cargo: " + cargoBuscado.getNome());
+                                            } else {
+                                                System.out.println("Cargo não encontrado para este funcionário.");
+                                            }
+                                        } else {
+                                            System.out.println("Código de cargo não associado ao funcionário.");
+                                        }
+                                        break;
+
+                                    case "endereco":
+                                        System.out.println(
+                                                "Deseja o endereço completo ou informações separadas? (Digite 'completo' ou 'separado')");
+                                        String resposta = InputUtils.getInput(scan);
+
+                                        if (funcionarioBuscado.getCod_endereco() != null) {
+                                            Endereco enderecoBuscado = enderecoDAO
+                                                    .buscarPorCodigo(funcionarioBuscado.getCod_endereco());
+
+                                            if (enderecoBuscado != null) {
+                                                if (resposta.equalsIgnoreCase("completo")) {
+                                                    System.out.println(
+                                                            "Endereço Completo: " + enderecoBuscado.getRua() + ", " +
+                                                                    enderecoBuscado.getNumero() + ", "
+                                                                    + enderecoBuscado.getBairro() + ", " +
+                                                                    enderecoBuscado.getComplemento() + ", "
+                                                                    + enderecoBuscado.getCep());
+                                                } else if (resposta.equalsIgnoreCase("separado")) {
+                                                    boolean continuarEndereco = true;
+                                                    while (continuarEndereco) {
+                                                        System.out.println(
+                                                                "\nDigite as opções de endereço que deseja ver (ex: rua, numero, bairro) ou 'sair' para encerrar.");
+                                                        String escolhaEndereco = InputUtils.getInput(scan);
+
+                                                        if (escolhaEndereco.equals("sair")) {
+                                                            continuarEndereco = false;
+                                                            break;
+                                                        }
+
+                                                        String[] escolhasEndereco = escolhaEndereco.split(","); // SEPARAR
+                                                                                                                // OPÇÕES
+                                                                                                                // POR
+                                                                                                                // VÍRGULA
+                                                        for (String opEndereco : escolhasEndereco) {
+                                                            switch (opEndereco.trim()) {
+                                                                case "rua":
+                                                                    System.out.println(
+                                                                            "Rua: " + enderecoBuscado.getRua());
+                                                                    break;
+                                                                case "numero":
+                                                                    System.out.println(
+                                                                            "Número: " + enderecoBuscado.getNumero());
+                                                                    break;
+                                                                case "bairro":
+                                                                    System.out.println(
+                                                                            "Bairro: " + enderecoBuscado.getBairro());
+                                                                    break;
+                                                                case "complemento":
+                                                                    System.out.println("Complemento: "
+                                                                            + enderecoBuscado.getComplemento());
+                                                                    break;
+                                                                case "cep":
+                                                                    System.out.println(
+                                                                            "CEP: " + enderecoBuscado.getCep());
+                                                                    break;
+                                                                default:
+                                                                    System.out.println("Opção inválida: " + opEndereco);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {
+                                                    System.out.println(
+                                                            "Opção inválida. Digite 'completo' ou 'separado'.");
+                                                }
+                                            } else {
+                                                System.out.println("Endereço não encontrado para este funcionário.");
+                                            }
+                                        } else {
+                                            System.out.println("Código de endereço não associado ao funcionário.");
+                                        }
+                                        break;
+
+                                    default:
+                                        System.out.println("Opção inválida: " + op);
+                                }
+                                System.out.println("--------------------\n"); // Fechamento do bloco de informações
+                            }
+
+                            System.out.println(msg.peguntaSairCaso());
+                            String respostaSair = InputUtils.getInput(scan);
+                            if (respostaSair.equalsIgnoreCase("nao")) {
+                                continuarFuncionario = false;
+                            }
+                        }
+                    } else {
+                        System.out.println("Funcionário não encontrado.");
+                    }
+                    break;
+
+                case "setor":
+                boolean continuarSetor = true;
+                System.out.println(msg.pergunta2());
+                String resposta2 = InputUtils.getInput(scan);
+                Setor setorBuscasdo = setorDAO.buscarPorNome(resposta2);
+
+                if (setorBuscasdo != null) {
+                    System.out.println("\n--------------------");
+                    System.out.println("Cargo encontrado! O que você deseja visualizar?");
+                    System.out.println("1. Nome");
+                    System.out.println("2. Descricao");
+                    System.out.println("--------------------\n");
+
+                    while (continuarSetor) {
+                        System.out.println(
+                                "Digite as opções que deseja ver (separadas por vírgula, ex: 1, 3, 7) ou 'sair' para encerrar.");
+                        String escolha = InputUtils.getInput(scan);
+
+                        if (escolha.equals("sair")) {
+                            continuarSetor = false;
+                            break;
+                        }
+
+                        String[] escolhas = escolha.split(","); // SEPARAR OPÇÕES POR VÍRGULA
+
+                        for (String op : escolhas) {
+                            System.out.println("\n--------------------");
+                            switch (op.trim()) {
+                                case "nome":
+                                    System.out.println("Nome: " + setorBuscasdo.getNome());
+                                    break;
+                                case "descricao":
+                                    System.out.println("Descrição: " + setorBuscasdo.getDescricao());
+                                    break;
+                                default:
+                                    System.out.println("Opção inválida: " + op);
+                            }
+                            System.out.println("--------------------\n"); // Fechamento do bloco de informações
+                        }
+
+                        System.out.println(msg.peguntaSairCaso());
+                        String respostaSair = InputUtils.getInput(scan);
+                        if (respostaSair.equalsIgnoreCase("nao")) {
+                            continuarSetor = false;
+                        }
+                    }
                 } else {
                     System.out.println("Setor não encontrado.");
                 }
+                break;
 
-        // CARGO
-            // INSERT
-                Cargo novoCargo= new Cargo("Teste", "1000", "pika", "nada", "1");
-                cargoDAO.salvar(novoCargo);
-                System.out.println("Cargo salvo com sucesso!");
-            // UPDATE - PELO NOME DO CARGO
-                Cargo cargoAtualizado = new Cargo("Teste", "3000", "pika", "nada", "1");
-                cargoDAO.atualizar(cargoAtualizado);
-                System.out.println("Cargo atualizado com sucesso!");
-            // DELETE - PELO NOME DO CARGO
-                cargoDAO.deletar("Teste");
-            // SELECT - PELO NOME DO CARGO
-                Cargo cargoBuscado = cargoDAO.buscarPorNome("Teste");
+                case "cargo":
+                boolean continuarCargo = true;
+                System.out.println(msg.pergunta3());
+                String resposta3 = InputUtils.getInput(scan);
+                Cargo cargoBuscado = cargoDAO.buscarPorNome(resposta3);
+
                 if (cargoBuscado != null) {
-                    System.out.println("Aluno encontrado: " + cargoBuscado.getSalarioBase() + ", " + cargoBuscado.getRequisitos() + ", " + cargoBuscado.getNome() + ", " + cargoBuscado.getHierarquia());
+                    System.out.println("\n--------------------");
+                    System.out.println("Cargo encontrado! O que você deseja visualizar?");
+                    System.out.println("1. Nome");
+                    System.out.println("2. Salário Base");
+                    System.out.println("1. Hierarquia");
+                    System.out.println("2. Requisitos");
+                    System.out.println("2. Setor");
+                    System.out.println("--------------------\n");
+
+                    while (continuarCargo) {
+                        System.out.println(
+                                "Digite as opções que deseja ver (separadas por vírgula, ex: 1, 3, 7) ou 'sair' para encerrar.");
+                        String escolha = InputUtils.getInput(scan);
+
+                        if (escolha.equals("sair")) {
+                            continuarCargo = false;
+                            break;
+                        }
+
+                        String[] escolhas = escolha.split(","); // SEPARAR OPÇÕES POR VÍRGULA
+
+                        for (String op : escolhas) {
+                            System.out.println("\n--------------------");
+                            switch (op.trim()) {
+                                case "nome":
+                                    System.out.println("Nome: " + cargoBuscado.getNome());
+                                    break;
+                                case "salario base":
+                                    System.out.println("Salário Base: " + cargoBuscado.getSalarioBase());
+                                    break;
+                                case "hierarquia":
+                                    System.out.println("Hierarquia: " + cargoBuscado.getHierarquia());
+                                    break;
+                                case "requisitos":
+                                    System.out.println("Requisitos: " + cargoBuscado.getRequisitos());
+                                    break;
+                                case "setor":
+                                if (cargoBuscado.getCod_setor() != null) {
+                                    Setor setorBuscado = setorDAO.buscarPorCodigo(cargoBuscado.getCod_setor());
+                                    if (setorBuscado != null) {
+                                        System.out.println("setpr: " + setorBuscado.getNome());
+                                    } else {
+                                        System.out.println("Cargo não encontrado para este funcionário.");
+                                    }
+                                } else {
+                                    System.out.println("Código de cargo não associado ao funcionário.");
+                                }
+                                break;
+                                default:
+                                    System.out.println("Opção inválida: " + op);
+                            }
+                            System.out.println("--------------------\n"); // Fechamento do bloco de informações
+                        }
+
+                        System.out.println(msg.peguntaSairCaso());
+                        String respostaSair = InputUtils.getInput(scan);
+                        if (respostaSair.equalsIgnoreCase("nao")) {
+                            continuarCargo = false;
+                        }
+                    }
                 } else {
                     System.out.println("Cargo não encontrado.");
                 }
-      
-        // FUNCIONARIO
-            // INSERT
-                Funcionario novoFuncionario= new Funcionario("João Silva", "A", "40h", "2024-01-15", "1990-05-20","48553951880" , "987564321", "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
-                funcionarioDAO.salvar(novoFuncionario);
-                System.out.println("Funcionario salvo com sucesso!");
-            // UPDATE - PELO CPF DO FUNCIONARIO
-                Funcionario funcionarioAtualizado = new Funcionario("João Silva", "B", "40h", "2024-01-15", "1990-05-20","48553951880" , "987564321", "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
-                funcionarioDAO.atualizar(funcionarioAtualizado);
-                System.out.println("Cargo atualizado com sucesso!");
-            // DELETE - PELO CPF DO FUNCIONARIO
-            funcionarioDAO.deletar("48553951880");
-            // SELECT - PELO CPF DO FUNCIONARIO
-            Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf("48553951880");
-            if (funcionarioBuscado != null) {
-                System.out.println("Aluno encontrado: " + funcionarioBuscado.getTelefone() + ", " + funcionarioBuscado.getGenero() + ", " + funcionarioBuscado.getNome());
-            } else {
-                System.out.println("Cargo não encontrado.");
-            }
- */ 
+                break;
 
-        // ENDERECO
-            // INSERT
-                Endereco novoEndereco = new Endereco("900", "Vila Gabriel", "18090602", "Joaão Riberiro", "Bloco 5 apto 12");
-                enderecoDAO.salvar(novoEndereco);
-                System.out.println("Endereco salvo com sucesso!");
-            // UPDATE - PELO CEP DO ENDERECO
-            Endereco enderecoAtualizado = new Endereco("900", "Vila Gabriel", "18090602", "João Ribeiro", "Bloco 5 apto 12");
-                enderecoDAO.atualizar(enderecoAtualizado);
-                System.out.println("Cargo atualizado com sucesso!");
-            // DELETE - PELO CEP DO ENDERECO
-            //enderecoDAO.deletar("18090602");
-            // SELECT - PELO CEP DO ENDERECO
-            Endereco enderecoBuscado = enderecoDAO.buscarPorCep("18090602");
-            if (enderecoBuscado != null) {
-                System.out.println("Endereco encontrado: " + enderecoBuscado.getBairro() + ", " + enderecoBuscado.getNumero() + ", " + enderecoBuscado.getRua());
-            } else {
-                System.out.println("Cargo não encontrado.");
+                case "sair":
+                    continuar = false;
+                    break;
+
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
             }
+        }
+
+        /*
+         * // SETOR
+         * // INSERT
+         * Setor novoSetor= new Setor("SetorTeste", "TestandoSetor");
+         * setorDAO.salvar(novoSetor);
+         * System.out.println("Setor salvo com sucesso!");
+         * // UPDATE - PELO NOME DO SETOR
+         * Setor setorAtualizado = new Setor("SetorTeste2", "TestandoSetor");
+         * setorDAO.atualizar("SetorTeste", setorAtualizado);
+         * System.out.println("Setor atualizado com sucesso!");
+         * // DELETE - PELO NOME DO SETOR
+         * setorDAO.deletar("SetorTeste2");
+         * // SELECT - PELO NOME DO SETOR
+         * Setor setorBuscado = setorDAO.buscarPorNome("SetorTeste");
+         * if (setorBuscado != null) {
+         * System.out.println("Setor encontrado: " + setorBuscado.getDescricao());
+         * } else {
+         * System.out.println("Setor não encontrado.");
+         * }
+         * 
+         * // CARGO
+         * // INSERT
+         * Cargo novoCargo= new Cargo("Teste", "1000", "pika", "nada", "1");
+         * cargoDAO.salvar(novoCargo);
+         * System.out.println("Cargo salvo com sucesso!");
+         * // UPDATE - PELO NOME DO CARGO
+         * Cargo cargoAtualizado = new Cargo("Teste", "3000", "pika", "nada", "1");
+         * cargoDAO.atualizar(cargoAtualizado);
+         * System.out.println("Cargo atualizado com sucesso!");
+         * // DELETE - PELO NOME DO CARGO
+         * cargoDAO.deletar("Teste");
+         * // SELECT - PELO NOME DO CARGO
+         * Cargo cargoBuscado = cargoDAO.buscarPorNome("Teste");
+         * if (cargoBuscado != null) {
+         * System.out.println("Cargo encontrado: " + cargoBuscado.getSalarioBase() +
+         * ", " + cargoBuscado.getRequisitos() + ", " + cargoBuscado.getNome() + ", " +
+         * cargoBuscado.getHierarquia());
+         * } else {
+         * System.out.println("Cargo não encontrado.");
+         * }
+         * 
+         * // FUNCIONARIO
+         * // INSERT
+         * Funcionario novoFuncionario= new Funcionario("João Silva", "A", "40h",
+         * "2024-01-15", "1990-05-20","48553951880" , "987564321",
+         * "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
+         * funcionarioDAO.salvar(novoFuncionario);
+         * System.out.println("Funcionario salvo com sucesso!");
+         * // UPDATE - PELO CPF DO FUNCIONARIO
+         * Funcionario funcionarioAtualizado = new Funcionario("João Silva", "B", "40h",
+         * "2024-01-15", "1990-05-20","48553951880" , "987564321",
+         * "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
+         * funcionarioDAO.atualizar(funcionarioAtualizado);
+         * System.out.println("Cargo atualizado com sucesso!");
+         * // DELETE - PELO CPF DO FUNCIONARIO
+         * funcionarioDAO.deletar("48553951880");
+         * // SELECT - PELO CPF DO FUNCIONARIO
+         * Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf("48553951880");
+         * if (funcionarioBuscado != null) {
+         * System.out.println("Funcionario encontrado: " +
+         * funcionarioBuscado.getTelefone() + ", " + funcionarioBuscado.getGenero() +
+         * ", " + funcionarioBuscado.getNome());
+         * } else {
+         * System.out.println("Cargo não encontrado.");
+         * }
+         * 
+         * // ENDERECO
+         * // INSERT
+         * Endereco novoEndereco = new Endereco("900", "Vila Gabriel", "18090602",
+         * "Joaão Riberiro", "Bloco 5 apto 12");
+         * enderecoDAO.salvar(novoEndereco);
+         * System.out.println("Endereco salvo com sucesso!");
+         * // UPDATE - PELO CEP DO ENDERECO
+         * Endereco enderecoAtualizado = new Endereco("900", "Vila Gabriel", "18090602",
+         * "João Ribeiro", "Bloco 5 apto 12");
+         * enderecoDAO.atualizar(enderecoAtualizado);
+         * System.out.println("Cargo atualizado com sucesso!");
+         * // DELETE - PELO CEP DO ENDERECO
+         * enderecoDAO.deletar("18090602");
+         * // SELECT - PELO CEP DO ENDERECO
+         * Endereco enderecoBuscado = enderecoDAO.buscarPorCep("18090602");
+         * if (enderecoBuscado != null) {
+         * System.out.println("Endereco encontrado: " + enderecoBuscado.getBairro() +
+         * ", " + enderecoBuscado.getNumero() + ", " + enderecoBuscado.getRua());
+         * } else {
+         * System.out.println("Cargo não encontrado.");
+         * }
+         */
     }
 }

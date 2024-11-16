@@ -144,4 +144,31 @@ public class CargoDAO extends GenericDAO<Cargo> {
 
         return cargo;
     }
+
+    public Cargo buscarPorCodigo(String cod_cargo) {
+        String sql = "SELECT * FROM cargo WHERE cod_cargo = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Cargo cargo = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cod_cargo);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                cargo = getEntityFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(stmt);
+            DatabaseConnection.closeConnection(conn);
+        }
+
+        return cargo;
+    }
 }

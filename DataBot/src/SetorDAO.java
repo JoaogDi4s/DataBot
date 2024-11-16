@@ -132,4 +132,31 @@ public class SetorDAO extends GenericDAO<Setor> {
 
         return setor;
     }
+
+    public Setor buscarPorCodigo(String cod_setor) {
+        String sql = "SELECT * FROM setor WHERE cod_setor = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Setor setor = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cod_setor);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                setor = getEntityFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(stmt);
+            DatabaseConnection.closeConnection(conn);
+        }
+
+        return setor;
+    }
 }
