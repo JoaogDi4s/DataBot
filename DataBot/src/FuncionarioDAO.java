@@ -168,4 +168,32 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
 
         return funcionario;
     }
+
+    public Funcionario buscarPorCpf(String cpf) {
+        String sql = "SELECT * FROM funcionario WHERE cpf = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Funcionario funcionario = null;
+    
+        try {
+            conn = DatabaseConnection.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cpf); // Busca exata
+            rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                funcionario = getEntityFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(stmt);
+            DatabaseConnection.closeConnection(conn);
+        }
+    
+        return funcionario;
+    }
+    
 }

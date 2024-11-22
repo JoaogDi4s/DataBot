@@ -46,6 +46,10 @@ public class Mensagens {
     // LOOP
     public String peguntaSairCaso(){
         return "Gostaria de fazer a consulta de outro dado?";
-}
+ 
+    }
 
+    public String perguntaEscolha(){
+        return "Você gostaria de consultar, criar ou deletar ou atualizar um dado?";
+    }
 }   

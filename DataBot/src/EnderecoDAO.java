@@ -95,15 +95,19 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
     }
 
     // DELETAR UM ENDERECO PELO CEP
-    public void deletar(String cep) {
-        String sql = getDeleteQuery();
-        Connection conn = null;
+    public void deletar(String cpf) {
+        String sql = """
+            DELETE FROM endereco
+            WHERE cod_endereco = (
+                SELECT cod_endereco FROM funcionario WHERE cpf = ?
+            )
+            """;        Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cep);
+            stmt.setString(1, cpf);
             stmt.executeUpdate();
             System.out.println("endereco deletado com sucesso!");
         } catch (SQLException e) {
@@ -114,6 +118,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         }
     }
 
+    
     // BUSCAR UM ENDERECO PELO CODIGO
    public Endereco buscarPorCodigo(String cod_edereco) {
     String sql = "SELECT * FROM endereco WHERE cod_endereco = ?";
