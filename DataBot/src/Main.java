@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -186,8 +185,7 @@ public class Main {
                                                 default:
                                                     System.out.println("Opção inválida: " + op);
                                             }
-                                            System.out.println("--------------------\n"); // Fechamento do bloco de
-                                                                                          // informações
+                                            System.out.println("--------------------\n");
                                         }
 
                                         System.out.println(msg.peguntaSairCaso());
@@ -224,7 +222,7 @@ public class Main {
                                             break;
                                         }
 
-                                        String[] escolhas = escolhaSetor.split(","); // SEPARAR OPÇÕES POR VÍRGULA
+                                        String[] escolhas = escolhaSetor.split(",");
 
                                         for (String op : escolhas) {
                                             System.out.println("\n--------------------");
@@ -238,8 +236,7 @@ public class Main {
                                                 default:
                                                     System.out.println("Opção inválida: " + op);
                                             }
-                                            System.out.println("--------------------\n"); // Fechamento do bloco de
-                                                                                          // informações
+                                            System.out.println("--------------------\n");
                                         }
 
                                         System.out.println(msg.peguntaSairCaso());
@@ -340,6 +337,63 @@ public class Main {
                     }
                     break;
                 case "criar":
+                    boolean escolhaCriar = true;
+                    System.out.println("O que você gostaria de adcionar ao banco de dados?");
+                    while (escolhaCriar) {
+                        String respostaCriar = InputUtils.getInput(scan);
+                        switch (respostaCriar) {
+                            case "funcionario":
+                            System.out.println("Qual o nome do funcionário?");
+                            String funcionarioNome = InputUtils.getInput(scan);
+                            System.out.println("QUal o RG do funcionário? [nullable]");
+                            String funcionarioRG = InputUtils.getInput(scan);
+                            System.out.println("Qual o CPF do funcionário?");
+                            String funcionarioCPF = InputUtils.getInput(scan);
+                            System.out.println("Qual o email do funcionário? [nullable]");
+                            String funcionarioEmail = InputUtils.getInput(scan);
+                            System.out.println("Qual o genero do funcionário?");
+                            String funcionarioGenero = InputUtils.getInput(scan);
+                            System.out.println("Qual a data de nascimento do funcionário");
+                            String funcionarioNascimentto = InputUtils.getInput(scan);
+                            System.out.println("Qual o telefone do funcionário? [nullable]");
+                            String funcionarioTelefone = InputUtils.getInput(scan);
+                            System.out.println("Qual o código do endereço do funcionário? [Você precisa criar um endereço antes]");
+                            String funcionarioCodEndereco = InputUtils.getInput(scan);
+                            System.out.println("qual a carga horária do funcionário?");
+                            String funcionarioCargaHoraria = InputUtils.getInput(scan);
+                            System.out.println("Qual a data de admissão do funcionário?");
+                            String funcionarioDataAdmissao = InputUtils.getInput(scan);
+                            System.out.println("Qual o projeto o funcionário? [nullable]");
+                            String funcionarioPojeto = InputUtils.getInput(scan);
+                            System.out.println("Qual o código do cargo do funcionário? [Você precisa criar um cargpo antes]");
+                            String funcionarioCodCargo = InputUtils.getInput(scan);
+
+                            Funcionario novoFuncionario= new Funcionario(funcionarioNome, funcionarioPojeto, funcionarioCargaHoraria, funcionarioDataAdmissao, funcionarioNascimentto, funcionarioCPF, funcionarioTelefone, funcionarioEmail,funcionarioGenero,funcionarioRG, funcionarioCodEndereco,funcionarioCodCargo);
+                            funcionarioDAO.salvar(novoFuncionario);
+                            System.out.println("Funcionario criado com sucesso!");
+                                break;
+                            case "setor":
+                                System.out.println("Qual o nome do setor?");
+                                String setorNome = InputUtils.getInput(scan);
+                                System.out.println("Qual a descrição do setor?");
+                                String setorDescricao = InputUtils.getInput(scan);
+
+                                Setor novoSetor = new Setor(setorNome, setorDescricao);
+                                setorDAO.salvar(novoSetor);
+                                System.out.println("Setor criado com sucesso");
+                                break;
+                            case "cargo":
+                                break;
+                            case "endereco":
+                                break;
+                            case "sair":
+                                escolhaCriar = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida, tente novamente.");
+                                break;
+                        }
+                    }
                     break;
                 case "atualizar":
                     break;
@@ -416,12 +470,12 @@ public class Main {
                                 }
                                 break;
 
-                                case "setor":
+                            case "setor":
                                 boolean setorEncontrado = false;
                                 while (!setorEncontrado) {
                                     System.out.println("Qual o nome do setor que você gostaria de deletar?");
                                     String setorNome = InputUtils.getInput(scan);
-                            
+
                                     Setor setorBuscado = setorDAO.buscarPorNome(setorNome);
                                     if (setorBuscado != null) {
                                         System.out.println("Setor encontrado: " + setorBuscado.getNome());
@@ -435,7 +489,8 @@ public class Main {
                                             System.out.println("Operação cancelada.");
                                             setorEncontrado = true; // Encerra o loop
                                         } else {
-                                            System.out.println("Resposta não compreendida. Por favor, responda com 'sim' ou 'nao'.");
+                                            System.out.println(
+                                                    "Resposta não compreendida. Por favor, responda com 'sim' ou 'nao'.");
                                         }
                                     } else {
                                         System.out.println("Setor não encontrado. Deseja tentar novamente? (sim/nao)");
@@ -447,31 +502,40 @@ public class Main {
                                     }
                                 }
                                 break;
-                            
-                                case "endereco":
+
+                            case "endereco":
                                 boolean enderecoEncontrado = false;
                                 while (!enderecoEncontrado) {
-                                    System.out.println("Qual o CPF do funcionário cujo endereço você gostaria de deletar?");
+                                    System.out.println(
+                                            "Qual o CPF do funcionário cujo endereço você gostaria de deletar?");
                                     String funcionarioCpf = InputUtils.getInput(scan);
-                            
-                                    Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf(funcionarioCpf); // Busca o funcionário pelo CPF
+
+                                    Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf(funcionarioCpf); // Busca
+                                                                                                                  // o
+                                                                                                                  // funcionário
+                                                                                                                  // pelo
+                                                                                                                  // CPF
                                     if (funcionarioBuscado != null) {
                                         System.out.println("Funcionário encontrado: " + funcionarioBuscado.getNome());
-                                        System.out.println("Deseja realmente deletar o endereço vinculado a este funcionário? (sim/nao)");
+                                        System.out.println(
+                                                "Deseja realmente deletar o endereço vinculado a este funcionário? (sim/nao)");
                                         String confirmacao = InputUtils.getInput(scan).toLowerCase();
-                            
+
                                         if (confirmacao.equals("sim")) {
-                                            enderecoDAO.deletar(funcionarioCpf); // Método no DAO para deletar o endereço
+                                            enderecoDAO.deletar(funcionarioCpf); // Método no DAO para deletar o
+                                                                                 // endereço
                                             System.out.println("Endereço deletado com sucesso!");
                                             enderecoEncontrado = true; // Encerra o loop
                                         } else if (confirmacao.equals("nao")) {
                                             System.out.println("Operação cancelada.");
                                             enderecoEncontrado = true; // Encerra o loop
                                         } else {
-                                            System.out.println("Resposta não compreendida. Por favor, responda com 'sim' ou 'nao'.");
+                                            System.out.println(
+                                                    "Resposta não compreendida. Por favor, responda com 'sim' ou 'nao'.");
                                         }
                                     } else {
-                                        System.out.println("Funcionário não encontrado. Deseja tentar novamente? (sim/nao)");
+                                        System.out.println(
+                                                "Funcionário não encontrado. Deseja tentar novamente? (sim/nao)");
                                         String tentarNovamente = InputUtils.getInput(scan).toLowerCase();
                                         if (!tentarNovamente.equals("sim")) {
                                             System.out.println("Encerrando operação.");
@@ -480,8 +544,6 @@ public class Main {
                                     }
                                 }
                                 break;
-                            
-
 
                             case "sair":
                                 escolhaDeletar = false;
