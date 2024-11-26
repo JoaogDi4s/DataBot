@@ -47,28 +47,46 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         stmt.setString(8, funcionario.getEmail());
         stmt.setString(9, funcionario.getGenero());
         stmt.setString(10, funcionario.getRg());
-        stmt.setString(11, funcionario.getCod_endereco());
-        stmt.setString(12, funcionario.getCod_cargo());
+        if (funcionario.getCod_endereco() != null) {
+            stmt.setInt(11, funcionario.getCod_endereco());
+        } else {
+            stmt.setNull(11, java.sql.Types.INTEGER);
+        }
+        if (funcionario.getCod_cargo() != null) {
+            stmt.setInt(12, funcionario.getCod_cargo());
+        } else {
+            stmt.setNull(12, java.sql.Types.INTEGER);
+        }
     }
 
     @Override
-    protected Funcionario getEntityFromResultSet(ResultSet rs) throws SQLException {
-        // MAPEANDO RESULTSET PARA OBJETO
-        return new Funcionario(
-                rs.getString("nome"),
-                rs.getString("projetos"),
-                rs.getString("carga_horaria"),
-                rs.getString("data_admissao"),
-                rs.getString("nascimento"),
-                rs.getString("cpf"),
-                rs.getString("telefone"),
-                rs.getString("email"),
-                rs.getString("genero"),
-                rs.getString("rg"),
-                rs.getString("cod_endereco"),
-                rs.getString("cod_cargo")
-                );
+protected Funcionario getEntityFromResultSet(ResultSet rs) throws SQLException {
+    // MAPEANDO RESULTSET PARA OBJETO
+    Integer codEndereco = rs.getInt("cod_endereco");
+    if (rs.wasNull()) {
+        codEndereco = null; // Se o valor for null no banco
     }
+
+    Integer codCargo = rs.getInt("cod_cargo");
+    if (rs.wasNull()) {
+        codCargo = null; // Se o valor for null no banco
+    }
+
+    return new Funcionario(
+            rs.getString("nome"),
+            rs.getString("projetos"),
+            rs.getString("carga_horaria"),
+            rs.getString("data_admissao"),
+            rs.getString("nascimento"),
+            rs.getString("cpf"),
+            rs.getString("telefone"),
+            rs.getString("email"),
+            rs.getString("genero"),
+            rs.getString("rg"),
+            codEndereco,
+            codCargo
+    );
+}
 
     // LIMPAR A TABELA FUNCIONARIO
     public void limparTabela() {
@@ -91,13 +109,15 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
 
     // ATUALIZAR FUNCIONARIO NO BD
     public void atualizar(Funcionario funcionario) {
-        String sql = getUpdateQuery();
+        String sql = getUpdateQuery(); // Query de atualização
         Connection conn = null;
         PreparedStatement stmt = null;
-
+    
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
+    
+            // Definindo os parâmetros
             stmt.setString(1, funcionario.getNome());
             stmt.setString(2, funcionario.getProjetos());
             stmt.setString(3, funcionario.getCarga_horaria());
@@ -108,19 +128,37 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             stmt.setString(8, funcionario.getEmail());
             stmt.setString(9, funcionario.getGenero());
             stmt.setString(10, funcionario.getRg());
-            stmt.setString(11, funcionario.getCod_endereco());
-            stmt.setString(12, funcionario.getCod_cargo());
-            stmt.setString(13, funcionario.getCpf()); // PARA WHERE
+    
+            // Tratamento para cod_endereco
+            if (funcionario.getCod_endereco() != null) {
+                stmt.setInt(11, funcionario.getCod_endereco());
+            } else {
+                stmt.setNull(11, java.sql.Types.INTEGER);
+            }
+    
+            // Tratamento para cod_cargo
+            if (funcionario.getCod_cargo() != null) {
+                stmt.setInt(12, funcionario.getCod_cargo());
+            } else {
+                stmt.setNull(12, java.sql.Types.INTEGER);
+            }
+    
+            // Onde CPF é usado no WHERE
+            stmt.setString(13, funcionario.getCpf());
+    
+            // Executando a atualização
             stmt.executeUpdate();
-            System.out.println("funcionario atualizado com sucesso!");
+            System.out.println("Funcionário atualizado com sucesso!");
+    
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Exibe o erro para facilitar o debug
         } finally {
+            // Garantindo que os recursos serão fechados
             DatabaseConnection.closeStatement(stmt);
             DatabaseConnection.closeConnection(conn);
         }
     }
-
+    
     // DELETAR UM FUNCIONARIO PELO CPF
     public void deletar(String cpf) {
         String sql = getDeleteQuery();

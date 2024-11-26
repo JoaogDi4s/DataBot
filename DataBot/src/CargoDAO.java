@@ -145,7 +145,7 @@ public class CargoDAO extends GenericDAO<Cargo> {
         return cargo;
     }
 
-    public Cargo buscarPorCodigo(String cod_cargo) {
+    public Cargo buscarPorCodigo(Integer cod_cargo) {
         String sql = "SELECT * FROM cargo WHERE cod_cargo = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -155,7 +155,11 @@ public class CargoDAO extends GenericDAO<Cargo> {
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cod_cargo);
+            if (cod_cargo != null) {
+                stmt.setInt(1, cod_cargo);
+            } else {
+                throw new IllegalArgumentException("O código do endereço não pode ser nulo.");
+            }
             rs = stmt.executeQuery();
 
             if (rs.next()) {

@@ -120,7 +120,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
 
     
     // BUSCAR UM ENDERECO PELO CODIGO
-   public Endereco buscarPorCodigo(String cod_edereco) {
+   public Endereco buscarPorCodigo(Integer cod_edereco) {
     String sql = "SELECT * FROM endereco WHERE cod_endereco = ?";
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -130,7 +130,11 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
     try {
         conn = DatabaseConnection.getConnection();
         stmt = conn.prepareStatement(sql);
-        stmt.setString(1, cod_edereco);
+        if (cod_edereco != null) {
+            stmt.setInt(1, cod_edereco);
+        } else {
+            throw new IllegalArgumentException("O código do endereço não pode ser nulo.");
+        }
         rs = stmt.executeQuery();
 
         if (rs.next()) {
