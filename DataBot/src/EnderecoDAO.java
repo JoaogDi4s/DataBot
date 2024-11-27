@@ -119,7 +119,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
     }
 
     
-    // BUSCAR UM ENDERECO PELO CODIGO
+    // BUSCAR UM ENDERECO PELO CODIGO/ 
    public Endereco buscarPorCodigo(Integer cod_edereco) {
     String sql = "SELECT * FROM endereco WHERE cod_endereco = ?";
     Connection conn = null;
