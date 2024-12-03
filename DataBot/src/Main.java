@@ -504,7 +504,6 @@ public class Main {
                         String respostaAtualizar = InputUtils.getInput(scan);
                         switch (respostaAtualizar) {
                             case "funcionario":
-
                                 System.out.println("Qual o CPF do funcionário que gostaria de modificar?");
                                 String escolhaCPF = InputUtils.getInput(scan);
                                 Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf(escolhaCPF);
@@ -516,29 +515,88 @@ public class Main {
                                         String respostaAtualizarFuncionario = InputUtils.getInput(scan);
                                         switch (respostaAtualizarFuncionario) {
                                             case "nome":
+                                                System.out.println("Qual será o novo nome?");
+                                                String novoNome = InputUtils.getInput(scan);
 
+                                                funcionarioBuscado.setNome(novoNome);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "rg":
-                                                break;
+                                                System.out.println("Qual será o novo RG?");
+                                                String novoRG = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setRg(novoRG);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                break;                                           
                                             case "cpf":
+                                                System.out.println("Qual será o novo CPF?");
+                                                String novoCPF = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setCpf(novoCPF);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "email":
+                                                System.out.println("Qual será o novo email?");
+                                                String novoEmail = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setEmail(novoEmail);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "genero":
+                                                System.out.println("Qual será o novo gênero?");
+                                                String novoGenero = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setGenero(novoGenero);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "nascimento":
+                                                System.out.println("Qual será o novo nascimento?");
+                                                String novoNascimento = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setNascimento(novoNascimento);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "telefone":
+                                                System.out.println("Qual será o novo telefone?");
+                                                String novoTelefone = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setTelefone(novoTelefone);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "codigo endereco":
+                                                System.out.println("Qual será o novo código de endereço?");
+                                                Integer novoCodEndereco = scan.nextInt();
+
+                                                funcionarioBuscado.setCod_endereco(novoCodEndereco);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "carga horaria":
+                                                System.out.println("Qual será o nova carga-horária?");
+                                                String novaCargaHoraria = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setCarga_horaria(novaCargaHoraria);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "data admisao":
+                                                System.out.println("Qual será o nova data de admissão?");
+                                                String novaDtAdmissao = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setData_admissao(novaDtAdmissao);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "projetos":
+                                                System.out.println("Qual será o novo projeto?");
+                                                String novosProjetos = InputUtils.getInput(scan);
+
+                                                funcionarioBuscado.setProjetos(novosProjetos);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "codigo cargo":
+                                                System.out.println("Qual será o novo código do cargo?");
+                                                Integer novoCodCargo = scan.nextInt();
+
+                                                funcionarioBuscado.setCod_cargo(novoCodCargo);
+                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "sair":
                                                 escolhaAtualizarFuncionario = false;
@@ -564,25 +622,23 @@ public class Main {
                                         String respostaAtualizarSetor = InputUtils.getInput(scan);
                                         switch (respostaAtualizarSetor) {
                                             case "nome":
-                                            System.out.println("Qual será o novo nome?");
-                                            String novoNome = InputUtils.getInput(scan);
-                                            
-                                            // Atualizar o setor com o novo nome.
-                                            setorBuscado.setNome(novoNome);
-                                            setorDAO.atualizar(escolhaSetor, setorBuscado);
-                        
-                                            System.out.println("Nome do setor atualizado com sucesso!");
-                                            break;
+                                                System.out.println("Qual será o novo nome?");
+                                                String novoNome = InputUtils.getInput(scan);
+
+                                                setorBuscado.setNome(novoNome);
+                                                setorDAO.atualizar(escolhaSetor, setorBuscado);
+
+                                                System.out.println("Nome do setor atualizado com sucesso!");
+                                                break;
                                             case "descricao":
-                                            System.out.println("Qual será a nova descrição?");
-                                            String novaDescricao = InputUtils.getInput(scan);
-                                            
-                                            // Atualizar o setor com a nova descrição.
-                                            setorBuscado.setDescricao(novaDescricao);
-                                            setorDAO.atualizar(escolhaSetor, setorBuscado);
-                        
-                                            System.out.println("Descrição do setor atualizada com sucesso!");
-                                            break;
+                                                System.out.println("Qual será a nova descrição?");
+                                                String novaDescricao = InputUtils.getInput(scan);
+
+                                                setorBuscado.setDescricao(novaDescricao);
+                                                setorDAO.atualizar(escolhaSetor, setorBuscado);
+
+                                                System.out.println("Descrição do setor atualizada com sucesso!");
+                                                break;
                                             case "sair":
                                                 escolhaAtualizarSetor = false;
                                                 break;
@@ -599,7 +655,7 @@ public class Main {
                                 System.out.println("Qual cargo gostaria de alterar?");
                                 String escolhaCargo = InputUtils.getInput(scan);
                                 Cargo cargoBucasdo = cargoDAO.buscarPorNome(escolhaCargo);
-                                
+
                                 if (cargoBucasdo != null) {
                                     System.out.println("Qual dado gostaria de alterar?");
                                     boolean escolhaAtualizarCargo = true;
@@ -607,14 +663,41 @@ public class Main {
                                         String respostaAtualizarCargo = InputUtils.getInput(scan);
                                         switch (respostaAtualizarCargo) {
                                             case "nome":
+                                                System.out.println("Qual será o novo nome?");
+                                                String novoNome = InputUtils.getInput(scan);
+
+                                                cargoBucasdo.setNome(novoNome);
+                                                cargoDAO.atualizar(escolhaCargo, cargoBucasdo);
+
                                                 break;
                                             case "salario base":
+                                                System.out.println("Qual será o novo Salario Base?");
+                                                String novoSalario = InputUtils.getInput(scan);
+
+                                                cargoBucasdo.setSalarioBase(novoSalario);
+                                                cargoDAO.atualizar(escolhaCargo, cargoBucasdo);
+
                                                 break;
                                             case "requisitos":
+                                                System.out.println("Quais serão os novos requisitos?");
+                                                String novoRequisito = InputUtils.getInput(scan);
+
+                                                cargoBucasdo.setRequisitos(novoRequisito);
+                                                cargoDAO.atualizar(escolhaCargo, cargoBucasdo);
                                                 break;
                                             case "hierarquia":
+                                                System.out.println("Quais a nova hierarquia?");
+                                                String novaHierarquia = InputUtils.getInput(scan);
+
+                                                cargoBucasdo.setHierarquia(novaHierarquia);
+                                                cargoDAO.atualizar(escolhaCargo, cargoBucasdo);
                                                 break;
                                             case "codigo setor":
+                                                System.out.println("Quais o codigo do novo setor?");
+                                                String novoSetor = InputUtils.getInput(scan);
+
+                                                cargoBucasdo.setCod_setor(novoSetor);
+                                                cargoDAO.atualizar(escolhaCargo, cargoBucasdo);
                                                 break;
                                             case "sair":
                                                 escolhaAtualizarCargo = false;
@@ -641,14 +724,39 @@ public class Main {
                                         String respostaAtualizarEndereco = InputUtils.getInput(scan);
                                         switch (respostaAtualizarEndereco) {
                                             case "rua":
+                                                System.out.println("Qual será a nova rua?");
+                                                String novaRua = InputUtils.getInput(scan);
+
+                                                enderecoBuscado.setRua(novaRua);
+                                                enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                                                 break;
                                             case "numero":
+                                                System.out.println("Qual será o novo número?");
+                                                String novoNunero = InputUtils.getInput(scan);
+
+                                                enderecoBuscado.setNumero(novoNunero);
+                                                enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                                                 break;
                                             case "bairro":
-                                                break;
+                                                System.out.println("Qual será o novo bairro?");
+                                                String novoNumero = InputUtils.getInput(scan);
+
+                                                enderecoBuscado.setNumero(novoNumero);
+                                                enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
+                                                break;                                            
                                             case "complemento":
+                                                System.out.println("Qual será o novo complemento?");
+                                                String novoComplemento = InputUtils.getInput(scan);
+
+                                                enderecoBuscado.setComplemento(novoComplemento);
+                                                enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                                                 break;
                                             case "cep":
+                                                System.out.println("Qual será o novo CEP?");
+                                                String NovoCEP = InputUtils.getInput(scan);
+
+                                                enderecoBuscado.setCep(NovoCEP);
+                                                enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                                                 break;
                                             case "sair":
                                                 escolhaAtualizarEndereco = false;
@@ -838,94 +946,5 @@ public class Main {
                     break;
             }
         }
-
-        /*
-         * // SETOR
-         * // INSERT
-         * Setor novoSetor= new Setor("SetorTeste", "TestandoSetor");
-         * setorDAO.salvar(novoSetor);
-         * System.out.println("Setor salvo com sucesso!");
-         * // UPDATE - PELO NOME DO SETOR
-         * Setor setorAtualizado = new Setor("SetorTeste2", "TestandoSetor");
-         * setorDAO.atualizar("SetorTeste", setorAtualizado);
-         * System.out.println("Setor atualizado com sucesso!");
-         * // DELETE - PELO NOME DO SETOR
-         * setorDAO.deletar("SetorTeste2");
-         * // SELECT - PELO NOME DO SETOR
-         * Setor setorBuscado = setorDAO.buscarPorNome("SetorTeste");
-         * if (setorBuscado != null) {
-         * System.out.println("Setor encontrado: " + setorBuscado.getDescricao());
-         * } else {
-         * System.out.println("Setor não encontrado.");
-         * }
-         * 
-         * // CARGO
-         * // INSERT
-         * Cargo novoCargo= new Cargo("Teste", "1000", "pika", "nada", "1");
-         * cargoDAO.salvar(novoCargo);
-         * System.out.println("Cargo salvo com sucesso!");
-         * // UPDATE - PELO NOME DO CARGO
-         * Cargo cargoAtualizado = new Cargo("Teste", "3000", "pika", "nada", "1");
-         * cargoDAO.atualizar(cargoAtualizado);
-         * System.out.println("Cargo atualizado com sucesso!");
-         * // DELETE - PELO NOME DO CARGO
-         * cargoDAO.deletar("Teste");
-         * // SELECT - PELO NOME DO CARGO
-         * Cargo cargoBuscado = cargoDAO.buscarPorNome("Teste");
-         * if (cargoBuscado != null) {
-         * System.out.println("Cargo encontrado: " + cargoBuscado.getSalarioBase() +
-         * ", " + cargoBuscado.getRequisitos() + ", " + cargoBuscado.getNome() + ", " +
-         * cargoBuscado.getHierarquia());
-         * } else {
-         * System.out.println("Cargo não encontrado.");
-         * }
-         * 
-         * // FUNCIONARIO
-         * // INSERT
-         * Funcionario novoFuncionario= new Funcionario("João Silva", "A", "40h",
-         * "2024-01-15", "1990-05-20","48553951880" , "987564321",
-         * "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
-         * funcionarioDAO.salvar(novoFuncionario);
-         * System.out.println("Funcionario salvo com sucesso!");
-         * // UPDATE - PELO CPF DO FUNCIONARIO
-         * Funcionario funcionarioAtualizado = new Funcionario("João Silva", "B", "40h",
-         * "2024-01-15", "1990-05-20","48553951880" , "987564321",
-         * "joaosilva@gmail.com", "masculino", "123456789", "1", "2");
-         * funcionarioDAO.atualizar(funcionarioAtualizado);
-         * System.out.println("Cargo atualizado com sucesso!");
-         * // DELETE - PELO CPF DO FUNCIONARIO
-         * funcionarioDAO.deletar("48553951880");
-         * // SELECT - PELO CPF DO FUNCIONARIO
-         * Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf("48553951880");
-         * if (funcionarioBuscado != null) {
-         * System.out.println("Funcionario encontrado: " +
-         * funcionarioBuscado.getTelefone() + ", " + funcionarioBuscado.getGenero() +
-         * ", " + funcionarioBuscado.getNome());
-         * } else {
-         * System.out.println("Cargo não encontrado.");
-         * }
-         * 
-         * // ENDERECO
-         * // INSERT
-         * Endereco novoEndereco = new Endereco("900", "Vila Gabriel", "18090602",
-         * "Joaão Riberiro", "Bloco 5 apto 12");
-         * enderecoDAO.salvar(novoEndereco);
-         * System.out.println("Endereco salvo com sucesso!");
-         * // UPDATE - PELO CEP DO ENDERECO
-         * Endereco enderecoAtualizado = new Endereco("900", "Vila Gabriel", "18090602",
-         * "João Ribeiro", "Bloco 5 apto 12");
-         * enderecoDAO.atualizar(enderecoAtualizado);
-         * System.out.println("Cargo atualizado com sucesso!");
-         * // DELETE - PELO CEP DO ENDERECO
-         * enderecoDAO.deletar("18090602");
-         * // SELECT - PELO CEP DO ENDERECO
-         * Endereco enderecoBuscado = enderecoDAO.buscarPorCep("18090602");
-         * if (enderecoBuscado != null) {
-         * System.out.println("Endereco encontrado: " + enderecoBuscado.getBairro() +
-         * ", " + enderecoBuscado.getNumero() + ", " + enderecoBuscado.getRua());
-         * } else {
-         * System.out.println("Cargo não encontrado.");
-         * }
-         */
     }
 }
