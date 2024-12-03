@@ -15,4 +15,15 @@ public class Setor {
     public String getDescricao() {
         return descricao;
     }
+    
+    // SETTERS
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    
 }

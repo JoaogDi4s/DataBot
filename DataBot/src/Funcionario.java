@@ -9,12 +9,12 @@ public class Funcionario {
     private String email;
     private String genero;
     private String rg;
-    private String cod_endereco;
-    private String cod_cargo;
+    private Integer cod_endereco;
+    private Integer cod_cargo;
 
     // CONSTRUTOR
     public Funcionario(String nome, String projetos, String carga_horaria, String data_admissao, String nascimento,
-            String cpf, String telefone, String email, String genero, String rg, String cod_endereco, String cod_cargo) {
+            String cpf, String telefone, String email, String genero, String rg, Integer cod_endereco, Integer cod_cargo) {
         this.nome = nome;
         this.projetos = projetos;
         this.carga_horaria = carga_horaria;
@@ -61,10 +61,47 @@ public class Funcionario {
     public String getRg(){
         return rg;
     }
-    public String getCod_endereco(){
+    public Integer getCod_endereco(){
         return cod_endereco;
     }
-    public String getCod_cargo(){
+    public Integer getCod_cargo(){
         return cod_cargo;
+    }
+    //SETTERS
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setProjetos(String projetos) {
+        this.projetos = projetos;
+    }
+    public void setCarga_horaria(String carga_horaria) {
+        this.carga_horaria = carga_horaria;
+    }
+    public void setData_admissao(String data_admissao) {
+        this.data_admissao = data_admissao;
+    }
+    public void setNascimento(String nascimento) {
+        this.nascimento = nascimento;
+    }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+    public void setCod_endereco(Integer cod_endereco) {
+        this.cod_endereco = cod_endereco;
+    }
+    public void setCod_cargo(Integer cod_cargo) {
+        this.cod_cargo = cod_cargo;
     }
 }
