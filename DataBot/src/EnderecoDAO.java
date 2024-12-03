@@ -70,7 +70,7 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
     }
 
     // ATUALIZAR UM ENDERECO NO BD
-    public void atualizar(Endereco endereco) {
+    public void atualizar(Integer CodEndereco, Endereco endereco) {
         String sql = getUpdateQuery();
         Connection conn = null;
         PreparedStatement stmt = null;

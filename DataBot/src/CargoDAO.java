@@ -73,7 +73,7 @@ public class CargoDAO extends GenericDAO<Cargo> {
     }
 
     // ATUALIZAR UM CARGO NO BD
-    public void atualizar(Cargo cargo) {
+    public void atualizar(String nomeAtual, Cargo cargo) {
         String sql = getUpdateQuery();
         Connection conn = null;
         PreparedStatement stmt = null;

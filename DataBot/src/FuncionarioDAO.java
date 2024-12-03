@@ -108,7 +108,7 @@ protected Funcionario getEntityFromResultSet(ResultSet rs) throws SQLException {
     }
 
     // ATUALIZAR FUNCIONARIO NO BD
-    public void atualizar(Funcionario funcionario) {
+    public void atualizar(String CPF, Funcionario funcionario) {
         String sql = getUpdateQuery(); // Query de atualização
         Connection conn = null;
         PreparedStatement stmt = null;
