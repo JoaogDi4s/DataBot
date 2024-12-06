@@ -12,52 +12,44 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         if (cpf == null) {
             return false;
         }
-    
+
         // Remove caracteres não numéricos
         cpf = cpf.replaceAll("\\D", "");
-    
+
         // Verifica se o CPF tem exatamente 11 dígitos
         if (cpf.length() != 11) {
             return false;
         }
-    
-        // Verifica se o CPF é uma sequência repetitiva (ex: 11111111111, 22222222222, etc.)
+
+        // Verifica se o CPF é uma sequência repetitiva (ex: 11111111111, 22222222222,
+        // etc.)
         if (cpf.matches("(\\d)\\1{10}")) {
             return false; // CPF genérico, não válido
         }
-    
+
         int soma = 0;
         int peso = 10;
         for (int i = 0; i < 9; i++) {
             soma += Character.getNumericValue(cpf.charAt(i)) * peso--;
         }
-    
+
         int primeiroDigito = (soma * 10) % 11;
         if (primeiroDigito == 10)
             primeiroDigito = 0;
         if (primeiroDigito != Character.getNumericValue(cpf.charAt(9))) {
             return false; // O primeiro dígito verificador não bate
         }
-    
+
         soma = 0;
         peso = 11;
         for (int i = 0; i < 10; i++) {
             soma += Character.getNumericValue(cpf.charAt(i)) * peso--;
         }
-    
+
         int segundoDigito = (soma * 10) % 11;
         if (segundoDigito == 10)
             segundoDigito = 0;
         return segundoDigito == Character.getNumericValue(cpf.charAt(10)); // Valida o segundo dígito verificador
-    }
-    
-
-    // Método para formatar CPF
-    public String formatarCpf(String cpf) {
-        if (cpf != null && cpf.length() == 11) {
-            return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
-        }
-        return null;
     }
 
     // Método para padronizar RG
@@ -71,16 +63,20 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
 
     // Método para validar RG (simples, validando apenas comprimento)
     public boolean validarRg(String rg) {
-        if (rg == null) {
-            return false;
+        if (rg == null || rg.trim().isEmpty()) {
+            System.out.println("RG é nulo ou vazio!"); // Log para depuração
+            return false; // Garante que RG nulo ou vazio retorne false
         }
-
+    
         // Remove caracteres não numéricos para validação
         rg = rg.replaceAll("\\D", "");
-
+        
         // Verifica se o RG tem entre 9 e 15 dígitos
-        return rg.length() >= 9 && rg.length() <= 15;
+        boolean isValid = rg.length() >= 9 && rg.length() <= 15;    
+        return isValid;
     }
+    
+    
 
     public boolean validarData(String data) {
         try {
@@ -98,9 +94,11 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
     // INSERT
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO funcionario (nome, projetos, carga_horaria, data_admissao, nascimento, cpf, telefone, email, genero, rg, cod_endereco, cod_cargo) "+
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    } 
+        return "INSERT INTO funcionario (nome, projetos, carga_horaria, data_admissao, nascimento, cpf, telefone, email, genero, rg, cod_endereco, cod_cargo) "
+                +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    }
+
     // UPDATE
     @Override
     protected String getUpdateQuery() {
@@ -202,19 +200,18 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         String sql = getUpdateQuery(); // Query de atualização
         Connection conn = null;
         PreparedStatement stmt = null;
-
+    
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-
+    
             // Valida e formata CPF
             String cpf = funcionario.getCpf();
             if (validarCpf(cpf)) {
-                cpf = formatarCpf(cpf); // Formata o CPF para "xxx.xxx.xxx-xx"
             } else {
                 throw new IllegalArgumentException("CPF inválido: " + cpf);
             }
-
+    
             // Valida e padroniza RG
             String rg = funcionario.getRg();
             if (validarRg(rg)) {
@@ -222,54 +219,62 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             } else {
                 throw new IllegalArgumentException("RG inválido: " + rg);
             }
-
+    
             // Definindo os parâmetros
             stmt.setString(1, funcionario.getNome());
             stmt.setString(2, funcionario.getProjetos());
             stmt.setString(3, funcionario.getCarga_horaria());
-
-            // Converte datas para SQL
-            stmt.setDate(4, Date.valueOf(funcionario.getData_admissao())); // Formato "yyyy-MM-dd"
-            stmt.setDate(5, Date.valueOf(funcionario.getNascimento())); // Formato "yyyy-MM-dd"
-
+    
+            if (funcionario.getData_admissao() != null) {
+                stmt.setDate(4, Date.valueOf(funcionario.getData_admissao())); // Formato "yyyy-MM-dd"
+            } else {
+                stmt.setNull(4, java.sql.Types.DATE);
+            }
+    
+            if (funcionario.getNascimento() != null) {
+                stmt.setDate(5, Date.valueOf(funcionario.getNascimento())); // Formato "yyyy-MM-dd"
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE);
+            }
+    
             stmt.setString(6, cpf); // CPF formatado
             stmt.setString(7, funcionario.getTelefone());
             stmt.setString(8, funcionario.getEmail());
             stmt.setString(9, funcionario.getGenero());
             stmt.setString(10, rg); // RG padronizado
-
+    
             // Tratamento para cod_endereco
             if (funcionario.getCod_endereco() != null) {
                 stmt.setInt(11, funcionario.getCod_endereco());
             } else {
                 stmt.setNull(11, java.sql.Types.INTEGER);
             }
-
-            // Tratamento para cod_cargoQA
+    
+            // Tratamento para cod_cargo
             if (funcionario.getCod_cargo() != null) {
                 stmt.setInt(12, funcionario.getCod_cargo());
             } else {
                 stmt.setNull(12, java.sql.Types.INTEGER);
             }
-
             // WHERE para atualização
             stmt.setString(13, CPF); // CPF original fornecido como argumento
-
+    
             // Executa atualização
             stmt.executeUpdate();
             System.out.println("Funcionário atualizado com sucesso!");
-
+    
         } catch (SQLException e) {
             e.printStackTrace(); // Exibe o erro para facilitar o debug
         } catch (IllegalArgumentException e) {
             System.out.println("Erro de validação: " + e.getMessage());
+            e.printStackTrace(); // Para mais detalhes sobre a exceção
         } finally {
             // Garantindo que os recursos serão fechados
             DatabaseConnection.closeStatement(stmt);
             DatabaseConnection.closeConnection(conn);
         }
     }
-
+    
     // DELETAR UM FUNCIONARIO PELO CPF
     public void deletar(String cpf) {
         String sql = getDeleteQuery();

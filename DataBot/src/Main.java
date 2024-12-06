@@ -346,7 +346,8 @@ public class Main {
                                         System.out.println("Qual o nome do funcionário?");
                                         funcionarioNome = scan.nextLine();
                                         if (funcionarioNome.isEmpty()) {
-                                            System.out.println("O nome do funcionário não pode estar vazio. Tente novamente.");
+                                            System.out.println(
+                                                    "O nome do funcionário não pode estar vazio. Tente novamente.");
                                         }
                                     } while (funcionarioNome.isEmpty());
 
@@ -373,7 +374,8 @@ public class Main {
                                     do {
                                         System.out.println("Qual o email do funcionário?");
                                         funcionarioEmail = scan.nextLine();
-                                        if (!funcionarioDAO.validarEmail(funcionarioEmail)) { // Supondo que há um método validarEmail
+                                        if (!funcionarioDAO.validarEmail(funcionarioEmail)) { // Supondo que há um
+                                                                                              // método validarEmail
                                             System.out.println("Email inválido. Tente novamente.");
                                         }
                                     } while (!funcionarioDAO.validarEmail(funcionarioEmail));
@@ -386,19 +388,22 @@ public class Main {
                                         System.out.println(
                                                 "Qual a data de nascimento do funcionário? (Formato: yyyy-MM-dd)");
                                         funcionarioNascimento = scan.nextLine();
-                                        if (!funcionarioDAO.validarData(funcionarioNascimento)) { // Supondo que há um método
-                                                                                   // validarData
+                                        if (!funcionarioDAO.validarData(funcionarioNascimento)) { // Supondo que há um
+                                                                                                  // método
+                                            // validarData
                                             System.out.println("Data inválida. Use o formato yyyy-MM-dd.");
                                         }
                                     } while (!funcionarioDAO.validarData(funcionarioNascimento));
 
                                     System.out.println("Qual o telefone do funcionário? [nullable]");
                                     String funcionarioTelefone = scan.nextLine();
-                                    if (funcionarioTelefone.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                    if (funcionarioTelefone.isBlank()) { // Verifica se a entrada está vazia ou contém
+                                                                         // apenas espaços
                                         funcionarioTelefone = null; // Define como null
                                     }
 
-                                    System.out.println("Qual o código do endereço do funcionário? [Você precisa criar um endereço antes]");
+                                    System.out.println(
+                                            "Qual o código do endereço do funcionário? [Você precisa criar um endereço antes]");
                                     Integer funcionarioCodEndereco = scan.nextInt();
                                     scan.nextLine();
 
@@ -417,11 +422,13 @@ public class Main {
 
                                     System.out.println("Qual o projeto do funcionário? [nullable]");
                                     String funcionarioProjeto = scan.nextLine();
-                                    if (funcionarioProjeto.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                    if (funcionarioProjeto.isBlank()) { // Verifica se a entrada está vazia ou contém
+                                                                        // apenas espaços
                                         funcionarioProjeto = null; // Define como null
                                     }
 
-                                    System.out.println("Qual o código do cargo do funcionário? [Você precisa criar um cargo antes]");
+                                    System.out.println(
+                                            "Qual o código do cargo do funcionário? [Você precisa criar um cargo antes]");
                                     Integer funcionarioCodCargo = scan.nextInt();
                                     scan.nextLine();
 
@@ -431,7 +438,7 @@ public class Main {
                                             funcionarioCargaHoraria,
                                             funcionarioDataAdmissao,
                                             funcionarioNascimento,
-                                            funcionarioDAO.formatarCpf(funcionarioCPF),
+                                            funcionarioCPF,
                                             funcionarioTelefone,
                                             funcionarioEmail,
                                             funcionarioGenero,
@@ -515,7 +522,8 @@ public class Main {
                                     String enderecoBairro = scan.nextLine();
                                     System.out.println("QUal complemento? [nullable]");
                                     String enderecoComplemento = scan.nextLine();
-                                    if (enderecoComplemento.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                    if (enderecoComplemento.isBlank()) { // Verifica se a entrada está vazia ou contém
+                                                                         // apenas espaços
                                         enderecoComplemento = null; // Define como null
                                     }
                                     System.out.println("Qual o CEP?");
@@ -571,24 +579,48 @@ public class Main {
                                             case "rg":
                                                 System.out.println("Qual será o novo RG?");
                                                 String novoRG = scan.nextLine();
-                                                funcionarioDAO.validarRg(novoRG);
 
-                                                funcionarioBuscado.setRg(novoRG);
-                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                // Depuração: Verificar o valor de novoRG
+                                                if (novoRG != null && !novoRG.trim().isEmpty()) {
+                                                    if (funcionarioDAO.validarRg(novoRG)) {
+                                                        funcionarioBuscado.setRg(novoRG);
+                                                        funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                    } else {
+                                                        System.out.println("RG inválido!");
+                                                    }
+                                                } else {
+                                                    System.out.println("RG não pode ser vazio!");
+                                                }
+
                                                 break;
                                             case "cpf":
                                                 System.out.println("Qual será o novo CPF?");
                                                 String novoCPF = scan.nextLine();
-
-                                                funcionarioBuscado.setCpf(novoCPF);
-                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                if (novoCPF != null && !novoCPF.trim().isEmpty()) {
+                                                    if (funcionarioDAO.validarCpf(novoCPF)) {
+                                                        funcionarioBuscado.setCpf(novoCPF);
+                                                        funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                    } else {
+                                                        System.out.println("RG inválido!");
+                                                    }
+                                                } else {
+                                                    System.out.println("CPF não pode ser vazio!");
+                                                }
                                                 break;
                                             case "email":
                                                 System.out.println("Qual será o novo email?");
                                                 String novoEmail = scan.nextLine();
 
-                                                funcionarioBuscado.setEmail(novoEmail);
-                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                if (novoEmail != null && !novoEmail.trim().isEmpty()) {
+                                                    if (funcionarioDAO.validarEmail(novoEmail)) {
+                                                        funcionarioBuscado.setEmail(novoEmail);
+                                                        funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                    } else {
+                                                        System.out.println("RG inválido!");
+                                                    }
+                                                } else {
+                                                    System.out.println("Email não pode ser vazio!");
+                                                }
                                                 break;
                                             case "genero":
                                                 System.out.println("Qual será o novo gênero?");
@@ -601,8 +633,16 @@ public class Main {
                                                 System.out.println("Qual será o novo nascimento?");
                                                 String novoNascimento = scan.nextLine();
 
-                                                funcionarioBuscado.setNascimento(novoNascimento);
-                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                if (novoNascimento != null && !novoNascimento.trim().isEmpty()) {
+                                                    if (funcionarioDAO.validarData(novoNascimento)) {
+                                                        funcionarioBuscado.setNascimento(novoNascimento);
+                                                        funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                    } else {
+                                                        System.out.println("Data inválida!");
+                                                    }
+                                                } else {
+                                                    System.out.println("data não pode ser vazio!");
+                                                }
                                                 break;
                                             case "telefone":
                                                 System.out.println("Qual será o novo telefone?");
@@ -628,14 +668,23 @@ public class Main {
                                             case "data admisao":
                                                 System.out.println("Qual será o nova data de admissão?");
                                                 String novaDtAdmissao = scan.nextLine();
-
-                                                funcionarioBuscado.setData_admissao(novaDtAdmissao);
-                                                funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                if (novaDtAdmissao != null && !novaDtAdmissao.trim().isEmpty()) {
+                                                    if (funcionarioDAO.validarData(novaDtAdmissao)) {
+                                                        funcionarioBuscado.setData_admissao(novaDtAdmissao);
+                                                        funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
+                                                    } else {
+                                                        System.out.println("Data inválida!");
+                                                    }
+                                                } else {
+                                                    System.out.println("data não pode ser vazio!");
+                                                }
                                                 break;
                                             case "projetos":
                                                 System.out.println("Qual será o novo projeto?");
                                                 String novosProjetos = scan.nextLine();
-
+                                                if (novosProjetos.isBlank()){
+                                                    novosProjetos = null;
+                                                }
                                                 funcionarioBuscado.setProjetos(novosProjetos);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
@@ -795,7 +844,9 @@ public class Main {
                                             case "complemento":
                                                 System.out.println("Qual será o novo complemento?");
                                                 String novoComplemento = InputUtils.getInput(scan);
-
+                                                if (novoComplemento.isBlank()){
+                                                    novoComplemento = null;
+                                                }
                                                 enderecoBuscado.setComplemento(novoComplemento);
                                                 enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                                                 break;
