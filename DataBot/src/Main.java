@@ -53,7 +53,6 @@ public class Main {
                                             continuarFuncionario = false;
                                             break;
                                         }
-
                                         String[] escolhas = escolhaFuncionario.split(","); // SEPARAR OPÇÕES POR VÍRGULA
 
                                         for (String op : escolhas) {
@@ -335,52 +334,96 @@ public class Main {
                     break;
                 case "criar":
                     boolean escolhaCriar = true;
-                    System.out.println("O que você gostaria de adcionar ao banco de dados?");
+                    System.out.println("O que você gostaria de adicionar ao banco de dados?");
                     while (escolhaCriar) {
                         String respostaCriar = InputUtils.getInput(scan);
                         switch (respostaCriar) {
                             case "funcionario":
                                 boolean continuarFuncionario = true;
                                 while (continuarFuncionario) {
-                                    System.out.println("Qual o nome do funcionário?");
-                                    String funcionarioNome = InputUtils.getInput(scan);
+                                    String funcionarioNome;
+                                    do {
+                                        System.out.println("Qual o nome do funcionário?");
+                                        funcionarioNome = scan.nextLine();
+                                        if (funcionarioNome.isEmpty()) {
+                                            System.out.println("O nome do funcionário não pode estar vazio. Tente novamente.");
+                                        }
+                                    } while (funcionarioNome.isEmpty());
 
-                                    System.out.println("Qual o RG do funcionário? [nullable]");
-                                    String funcionarioRG = InputUtils.getInput(scan);
+                                    String funcionarioRG;
+                                    do {
+                                        System.out.println("Qual o RG do funcionário?");
+                                        funcionarioRG = scan.nextLine();
+                                        if (funcionarioRG != null && !funcionarioDAO.validarRg(funcionarioRG)) {
+                                            System.out.println("RG inválido. Certifique-se de que está correto.");
+                                        }
+                                    } while (funcionarioRG != null && !funcionarioDAO.validarRg(funcionarioRG));
 
-                                    System.out.println("Qual o CPF do funcionário?");
-                                    String funcionarioCPF = InputUtils.getInput(scan);
+                                    String funcionarioCPF;
+                                    do {
+                                        System.out.println("Qual o CPF do funcionário?");
+                                        funcionarioCPF = scan.nextLine();
+                                        if (funcionarioCPF != null && !funcionarioDAO.validarCpf(funcionarioCPF)) {
+                                            System.out.println(
+                                                    "CPF inválido. Certifique-se de que contém 11 dígitos válidos.");
+                                        }
+                                    } while (funcionarioCPF != null && !funcionarioDAO.validarCpf(funcionarioCPF));
 
-                                    System.out.println("Qual o email do funcionário?");
-                                    String funcionarioEmail = InputUtils.getInput(scan);
+                                    String funcionarioEmail;
+                                    do {
+                                        System.out.println("Qual o email do funcionário?");
+                                        funcionarioEmail = scan.nextLine();
+                                        if (!funcionarioDAO.validarEmail(funcionarioEmail)) { // Supondo que há um método validarEmail
+                                            System.out.println("Email inválido. Tente novamente.");
+                                        }
+                                    } while (!funcionarioDAO.validarEmail(funcionarioEmail));
 
                                     System.out.println("Qual o gênero do funcionário?");
-                                    String funcionarioGenero = InputUtils.getInput(scan);
+                                    String funcionarioGenero = scan.nextLine();
 
-                                    System.out
-
-                                            .println("Qual a data de nascimento do funcionário?");
-                                    String funcionarioNascimento = InputUtils.getInput(scan);
+                                    String funcionarioNascimento;
+                                    do {
+                                        System.out.println(
+                                                "Qual a data de nascimento do funcionário? (Formato: yyyy-MM-dd)");
+                                        funcionarioNascimento = scan.nextLine();
+                                        if (!funcionarioDAO.validarData(funcionarioNascimento)) { // Supondo que há um método
+                                                                                   // validarData
+                                            System.out.println("Data inválida. Use o formato yyyy-MM-dd.");
+                                        }
+                                    } while (!funcionarioDAO.validarData(funcionarioNascimento));
 
                                     System.out.println("Qual o telefone do funcionário? [nullable]");
-                                    String funcionarioTelefone = InputUtils.getInput(scan);
+                                    String funcionarioTelefone = scan.nextLine();
+                                    if (funcionarioTelefone.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                        funcionarioTelefone = null; // Define como null
+                                    }
 
-                                    System.out.println(
-                                            "Qual o código do endereço do funcionário? [Você precisa criar um endereço antes]");
+                                    System.out.println("Qual o código do endereço do funcionário? [Você precisa criar um endereço antes]");
                                     Integer funcionarioCodEndereco = scan.nextInt();
+                                    scan.nextLine();
 
                                     System.out.println("Qual a carga horária do funcionário?");
-                                    String funcionarioCargaHoraria = InputUtils.getInput(scan);
+                                    String funcionarioCargaHoraria = scan.nextLine();
 
-                                    System.out.println("Qual a data de admissão do funcionário?");
-                                    String funcionarioDataAdmissao = InputUtils.getInput(scan);
+                                    String funcionarioDataAdmissao;
+                                    do {
+                                        System.out.println(
+                                                "Qual a data de admissão do funcionário? (Formato: yyyy-MM-dd)");
+                                        funcionarioDataAdmissao = scan.nextLine();
+                                        if (!funcionarioDAO.validarData(funcionarioDataAdmissao)) {
+                                            System.out.println("Data inválida. Use o formato yyyy-MM-dd.");
+                                        }
+                                    } while (!funcionarioDAO.validarData(funcionarioDataAdmissao));
 
                                     System.out.println("Qual o projeto do funcionário? [nullable]");
-                                    String funcionarioProjeto = InputUtils.getInput(scan);
+                                    String funcionarioProjeto = scan.nextLine();
+                                    if (funcionarioProjeto.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                        funcionarioProjeto = null; // Define como null
+                                    }
 
-                                    System.out.println(
-                                            "Qual o código do cargo do funcionário? [Você precisa criar um cargo antes]");
+                                    System.out.println("Qual o código do cargo do funcionário? [Você precisa criar um cargo antes]");
                                     Integer funcionarioCodCargo = scan.nextInt();
+                                    scan.nextLine();
 
                                     Funcionario novoFuncionario = new Funcionario(
                                             funcionarioNome,
@@ -388,7 +431,7 @@ public class Main {
                                             funcionarioCargaHoraria,
                                             funcionarioDataAdmissao,
                                             funcionarioNascimento,
-                                            funcionarioCPF,
+                                            funcionarioDAO.formatarCpf(funcionarioCPF),
                                             funcionarioTelefone,
                                             funcionarioEmail,
                                             funcionarioGenero,
@@ -407,15 +450,16 @@ public class Main {
                                     }
                                 }
                                 break;
+
                             case "setor":
                                 boolean continuarSetor = true;
 
                                 while (continuarSetor) {
                                     System.out.println("Qual o nome do setor?");
-                                    String setorNome = InputUtils.getInput(scan);
+                                    String setorNome = scan.nextLine();
 
                                     System.out.println("Qual a descrição do setor?");
-                                    String setorDescricao = InputUtils.getInput(scan);
+                                    String setorDescricao = scan.nextLine();
 
                                     Setor novoSetor = new Setor(setorNome, setorDescricao);
                                     setorDAO.salvar(novoSetor);
@@ -434,16 +478,16 @@ public class Main {
 
                                 while (continuarCargo) {
                                     System.out.println("Qual o nome do cargo?");
-                                    String cargoNome = InputUtils.getInput(scan);
+                                    String cargoNome = scan.nextLine();
                                     System.out.println("Qual o salário base do cargo?");
-                                    String cargoSalarioBase = InputUtils.getInput(scan);
+                                    String cargoSalarioBase = scan.nextLine();
                                     System.out.println("Quais os requisitos do cargo?");
-                                    String cargoRequisitos = InputUtils.getInput(scan);
+                                    String cargoRequisitos = scan.nextLine();
                                     System.out.println("Qual a hierarquia do cargo?");
-                                    String cargoHierarquia = InputUtils.getInput(scan);
+                                    String cargoHierarquia = scan.nextLine();
                                     System.out.println(
                                             "Qual o código do setor do cargo? [Você precisa criar um setor antes]");
-                                    String cargoCodSetor = InputUtils.getInput(scan);
+                                    String cargoCodSetor = scan.nextLine();
 
                                     Cargo novoCargo = new Cargo(cargoNome, cargoSalarioBase, cargoHierarquia,
                                             cargoRequisitos, cargoCodSetor);
@@ -451,7 +495,7 @@ public class Main {
                                     System.out.println("Setor Criado com sucesso");
 
                                     System.out.println("Deseja criar outro setor?");
-                                    String resposta = InputUtils.getInput(scan);
+                                    String resposta = scan.nextLine();
 
                                     if (!resposta.equals("sair")) {
                                         continuarCargo = false;
@@ -464,15 +508,18 @@ public class Main {
 
                                 while (continuarEndereco) {
                                     System.out.println("Qual o a rua?");
-                                    String enderecoRua = InputUtils.getInput(scan);
+                                    String enderecoRua = scan.nextLine();
                                     System.out.println("Qual número?");
-                                    String enderecoNumero = InputUtils.getInput(scan);
+                                    String enderecoNumero = scan.nextLine();
                                     System.out.println("Qual o bairro?");
-                                    String enderecoBairro = InputUtils.getInput(scan);
+                                    String enderecoBairro = scan.nextLine();
                                     System.out.println("QUal complemento? [nullable]");
-                                    String enderecoComplemento = InputUtils.getInput(scan);
+                                    String enderecoComplemento = scan.nextLine();
+                                    if (enderecoComplemento.isBlank()) { // Verifica se a entrada está vazia ou contém apenas espaços
+                                        enderecoComplemento = null; // Define como null
+                                    }
                                     System.out.println("Qual o CEP?");
-                                    String enderecoCEP = InputUtils.getInput(scan);
+                                    String enderecoCEP = scan.nextLine();
 
                                     Endereco novEndereco = new Endereco(enderecoNumero, enderecoBairro, enderecoCEP,
                                             enderecoRua, enderecoComplemento);
@@ -516,49 +563,50 @@ public class Main {
                                         switch (respostaAtualizarFuncionario) {
                                             case "nome":
                                                 System.out.println("Qual será o novo nome?");
-                                                String novoNome = InputUtils.getInput(scan);
+                                                String novoNome = scan.nextLine();
 
                                                 funcionarioBuscado.setNome(novoNome);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "rg":
                                                 System.out.println("Qual será o novo RG?");
-                                                String novoRG = InputUtils.getInput(scan);
+                                                String novoRG = scan.nextLine();
+                                                funcionarioDAO.validarRg(novoRG);
 
                                                 funcionarioBuscado.setRg(novoRG);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
-                                                break;                                           
+                                                break;
                                             case "cpf":
                                                 System.out.println("Qual será o novo CPF?");
-                                                String novoCPF = InputUtils.getInput(scan);
+                                                String novoCPF = scan.nextLine();
 
                                                 funcionarioBuscado.setCpf(novoCPF);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "email":
                                                 System.out.println("Qual será o novo email?");
-                                                String novoEmail = InputUtils.getInput(scan);
+                                                String novoEmail = scan.nextLine();
 
                                                 funcionarioBuscado.setEmail(novoEmail);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "genero":
                                                 System.out.println("Qual será o novo gênero?");
-                                                String novoGenero = InputUtils.getInput(scan);
+                                                String novoGenero = scan.nextLine();
 
                                                 funcionarioBuscado.setGenero(novoGenero);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "nascimento":
                                                 System.out.println("Qual será o novo nascimento?");
-                                                String novoNascimento = InputUtils.getInput(scan);
+                                                String novoNascimento = scan.nextLine();
 
                                                 funcionarioBuscado.setNascimento(novoNascimento);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "telefone":
                                                 System.out.println("Qual será o novo telefone?");
-                                                String novoTelefone = InputUtils.getInput(scan);
+                                                String novoTelefone = scan.nextLine();
 
                                                 funcionarioBuscado.setTelefone(novoTelefone);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
@@ -572,21 +620,21 @@ public class Main {
                                                 break;
                                             case "carga horaria":
                                                 System.out.println("Qual será o nova carga-horária?");
-                                                String novaCargaHoraria = InputUtils.getInput(scan);
+                                                String novaCargaHoraria = scan.nextLine();
 
                                                 funcionarioBuscado.setCarga_horaria(novaCargaHoraria);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "data admisao":
                                                 System.out.println("Qual será o nova data de admissão?");
-                                                String novaDtAdmissao = InputUtils.getInput(scan);
+                                                String novaDtAdmissao = scan.nextLine();
 
                                                 funcionarioBuscado.setData_admissao(novaDtAdmissao);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
                                                 break;
                                             case "projetos":
                                                 System.out.println("Qual será o novo projeto?");
-                                                String novosProjetos = InputUtils.getInput(scan);
+                                                String novosProjetos = scan.nextLine();
 
                                                 funcionarioBuscado.setProjetos(novosProjetos);
                                                 funcionarioDAO.atualizar(escolhaCPF, funcionarioBuscado);
@@ -743,7 +791,7 @@ public class Main {
 
                                                 enderecoBuscado.setNumero(novoNumero);
                                                 enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
-                                                break;                                            
+                                                break;
                                             case "complemento":
                                                 System.out.println("Qual será o novo complemento?");
                                                 String novoComplemento = InputUtils.getInput(scan);
