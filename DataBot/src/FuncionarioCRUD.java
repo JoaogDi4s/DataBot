@@ -49,8 +49,14 @@ public class FuncionarioCRUD implements CRUD {
                 }
             } while (!funcionarioDAO.validarEmail(funcionarioEmail));
 
-            System.out.println("Qual o gênero do funcionário?");
-            String funcionarioGenero = scan.nextLine();
+            String funcionarioGenero;
+            do {
+                System.out.println("Qual o gênero do funcionário?");
+                funcionarioGenero = scan.nextLine();
+                if (!funcionarioDAO.validarGenero(funcionarioGenero)) {
+                    System.out.println("Genero inválido, tente 'M', 'F' ou 'N'");
+                }
+            } while (!funcionarioDAO.validarGenero(funcionarioGenero));
 
             String funcionarioNascimento;
             do {

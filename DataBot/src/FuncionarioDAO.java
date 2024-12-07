@@ -7,7 +7,10 @@ import java.time.format.DateTimeParseException;
 import java.sql.Date;
 
 public class FuncionarioDAO extends GenericDAO<Funcionario> {
-
+    public boolean validarGenero(String genero) {
+        return genero != null && (genero.equals("M") || genero.equals("F") || genero.equals("N"));
+    }
+    
     public boolean validarCpf(String cpf) {
         if (cpf == null) {
             return false;
@@ -219,7 +222,13 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             } else {
                 throw new IllegalArgumentException("RG inválido: " + rg);
             }
-    
+            
+            String genero = funcionario.getGenero();
+            if(validarGenero(genero)){
+            }else{
+                throw new IllegalArgumentException("genero inválido: " + genero);
+            }
+
             // Definindo os parâmetros
             stmt.setString(1, funcionario.getNome());
             stmt.setString(2, funcionario.getProjetos());
@@ -240,7 +249,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             stmt.setString(6, cpf); // CPF formatado
             stmt.setString(7, funcionario.getTelefone());
             stmt.setString(8, funcionario.getEmail());
-            stmt.setString(9, funcionario.getGenero());
+            stmt.setString(9, genero);// genero formatado
             stmt.setString(10, rg); // RG padronizado
     
             // Tratamento para cod_endereco
