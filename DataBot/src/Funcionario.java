@@ -104,4 +104,4 @@ public class Funcionario {
     public void setCod_cargo(Integer cod_cargo) {
         this.cod_cargo = cod_cargo;
     }
-}
+

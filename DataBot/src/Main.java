@@ -55,6 +55,7 @@ public class Main {
                         String respostaCriar = InputUtils.getInput(scan);
                         switch (respostaCriar) {
                             case "funcionario":
+
                                 funcionarioCRUD.criar();
                                 break;
                             case "setor":
@@ -100,6 +101,7 @@ public class Main {
                                 escolhaAtualizar = false;
                                 break;
                             default:
+
                                 System.out.println(msg.opInvalida());
                                 break;
                         }

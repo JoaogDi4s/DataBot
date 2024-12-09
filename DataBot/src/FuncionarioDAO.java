@@ -1,11 +1,3 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.sql.Date;
-
 public class FuncionarioDAO extends GenericDAO<Funcionario> {
     public boolean validarGenero(String genero) {
         return genero != null && (genero.equals("M") || genero.equals("F") || genero.equals("N"));
@@ -24,8 +16,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             return false;
         }
 
-        // Verifica se o CPF é uma sequência repetitiva (ex: 11111111111, 22222222222,
-        // etc.)
+        // Verifica se o CPF é uma sequência repetitiva (ex: 11111111111, 22222222222, etc.)
         if (cpf.matches("(\\d)\\1{10}")) {
             return false; // CPF genérico, não válido
         }
@@ -70,16 +61,14 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             System.out.println("RG é nulo ou vazio!"); // Log para depuração
             return false; // Garante que RG nulo ou vazio retorne false
         }
-    
+
         // Remove caracteres não numéricos para validação
         rg = rg.replaceAll("\\D", "");
-        
+
         // Verifica se o RG tem entre 9 e 15 dígitos
         boolean isValid = rg.length() >= 9 && rg.length() <= 15;    
         return isValid;
     }
-    
-    
 
     public boolean validarData(String data) {
         try {
@@ -127,7 +116,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
 
     @Override
     protected void setParameters(PreparedStatement stmt, Funcionario funcionario) throws SQLException {
-        // DEFININDO OS PARÂMETROSNA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
+        // DEFININDO OS PARÂMETROS NA ORDEM CORRETA PARA A CONSULTA DE INSERÇÃO E
         // ATUALIZAÇÃO
         stmt.setString(1, funcionario.getNome());
         stmt.setString(2, funcionario.getProjetos());
@@ -203,18 +192,18 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
         String sql = getUpdateQuery(); // Query de atualização
         Connection conn = null;
         PreparedStatement stmt = null;
-    
+
         try {
             conn = DatabaseConnection.getConnection();
             stmt = conn.prepareStatement(sql);
-    
+
             // Valida e formata CPF
             String cpf = funcionario.getCpf();
             if (validarCpf(cpf)) {
             } else {
                 throw new IllegalArgumentException("CPF inválido: " + cpf);
             }
-    
+
             // Valida e padroniza RG
             String rg = funcionario.getRg();
             if (validarRg(rg)) {
@@ -222,7 +211,7 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             } else {
                 throw new IllegalArgumentException("RG inválido: " + rg);
             }
-            
+
             String genero = funcionario.getGenero();
             if(validarGenero(genero)){
             }else{
@@ -233,130 +222,47 @@ public class FuncionarioDAO extends GenericDAO<Funcionario> {
             stmt.setString(1, funcionario.getNome());
             stmt.setString(2, funcionario.getProjetos());
             stmt.setString(3, funcionario.getCarga_horaria());
-    
+
             if (funcionario.getData_admissao() != null) {
                 stmt.setDate(4, Date.valueOf(funcionario.getData_admissao())); // Formato "yyyy-MM-dd"
             } else {
                 stmt.setNull(4, java.sql.Types.DATE);
             }
-    
+
             if (funcionario.getNascimento() != null) {
                 stmt.setDate(5, Date.valueOf(funcionario.getNascimento())); // Formato "yyyy-MM-dd"
             } else {
                 stmt.setNull(5, java.sql.Types.DATE);
             }
-    
-            stmt.setString(6, cpf); // CPF formatado
+
+            stmt.setString(6, cpf);  // CPF
             stmt.setString(7, funcionario.getTelefone());
             stmt.setString(8, funcionario.getEmail());
-            stmt.setString(9, genero);// genero formatado
-            stmt.setString(10, rg); // RG padronizado
-    
-            // Tratamento para cod_endereco
+            stmt.setString(9, genero);  // Gênero
+            stmt.setString(10, rg);  // RG
+
             if (funcionario.getCod_endereco() != null) {
                 stmt.setInt(11, funcionario.getCod_endereco());
             } else {
                 stmt.setNull(11, java.sql.Types.INTEGER);
             }
-    
-            // Tratamento para cod_cargo
+
             if (funcionario.getCod_cargo() != null) {
                 stmt.setInt(12, funcionario.getCod_cargo());
             } else {
                 stmt.setNull(12, java.sql.Types.INTEGER);
             }
-            // WHERE para atualização
-            stmt.setString(13, CPF); // CPF original fornecido como argumento
-    
-            // Executa atualização
+
+            stmt.setString(13, CPF);
             stmt.executeUpdate();
-            System.out.println("Funcionário atualizado com sucesso!");
-    
+            System.out.println("Atualização feita com sucesso");
         } catch (SQLException e) {
-            e.printStackTrace(); // Exibe o erro para facilitar o debug
+            System.out.println("Erro ao atualizar funcionário: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro de validação: " + e.getMessage());
-            e.printStackTrace(); // Para mais detalhes sobre a exceção
-        } finally {
-            // Garantindo que os recursos serão fechados
-            DatabaseConnection.closeStatement(stmt);
-            DatabaseConnection.closeConnection(conn);
-        }
-    }
-    
-    // DELETAR UM FUNCIONARIO PELO CPF
-    public void deletar(String cpf) {
-        String sql = getDeleteQuery();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cpf);
-            stmt.executeUpdate();
-            System.out.println("funcionario deletado com sucesso!");
-        } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             DatabaseConnection.closeStatement(stmt);
             DatabaseConnection.closeConnection(conn);
         }
     }
-
-    // BUSCAR UM FUNCIONARIO PELO NOME
-    public Funcionario buscarPorNome(String nome) {
-        String sql = getSelectQuery();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Funcionario funcionario = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, "%" + nome.toLowerCase() + "%");
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                funcionario = getEntityFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseConnection.closeResultSet(rs);
-            DatabaseConnection.closeStatement(stmt);
-            DatabaseConnection.closeConnection(conn);
-        }
-
-        return funcionario;
-    }
-
-    public Funcionario buscarPorCpf(String cpf) {
-        String sql = "SELECT * FROM funcionario WHERE cpf = ?";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Funcionario funcionario = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cpf); // Busca exata
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                funcionario = getEntityFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseConnection.closeResultSet(rs);
-            DatabaseConnection.closeStatement(stmt);
-            DatabaseConnection.closeConnection(conn);
-        }
-
-        return funcionario;
-    }
-
 }
