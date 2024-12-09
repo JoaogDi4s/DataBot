@@ -12,8 +12,6 @@ public class Main {
         CargoCRUD cargoCRUD = new CargoCRUD();
         EnderecoCRUD enderecoCRUD = new EnderecoCRUD();
 
-        System.out.println(msg.consultaFunc2());
-
         // INTRODUÇÃO
         intro.introducao();
 
@@ -44,14 +42,16 @@ public class Main {
                                 break;
                             default:
                                 System.out.println(msg.opInvalida());
+                                break;
                         }
                     }
                     break;
                 // CRIAR
                 case "criar":
                     boolean escolhaCriar = true;
-                    System.out.println(msg.criarInicial());
+                    
                     while (escolhaCriar) {
+                        System.out.println(msg.criarInicial());
                         String respostaCriar = InputUtils.getInput(scan);
                         switch (respostaCriar) {
                             case "funcionario":
@@ -76,12 +76,12 @@ public class Main {
                     }
 
                     break;
-
                 // ATUALIZAR
                 case "atualizar":
                     boolean escolhaAtualizar = true;
-                    System.out.println(msg.atualizarInicial());
+                    
                     while (escolhaAtualizar) {
+                        System.out.println(msg.atualizarInicial());
                         String respostaAtualizar = InputUtils.getInput(scan);
                         switch (respostaAtualizar) {
                             case "funcionario":
@@ -109,8 +109,8 @@ public class Main {
                 // DELETAR
                 case "deletar":
                     boolean escolhaDeletar = true;
-                    System.out.println(msg.deletarInicial());
                     while (escolhaDeletar) {
+                        System.out.println(msg.deletarInicial());
                         String respostaDeletar = InputUtils.getInput(scan);
                         switch (respostaDeletar) {
                             case "funcionario":
@@ -126,7 +126,7 @@ public class Main {
                                 break;
 
                             case "endereco":
-
+                                enderecoCRUD.deletar();
                                 break;
 
                             case "sair":
@@ -139,6 +139,7 @@ public class Main {
                     }
                     break;
                 case "sair":
+                    System.out.println("-Encerrando chat, estou sempre aqui caso precise ;)\n");
                     escolha = false;
                     break;
                 default:

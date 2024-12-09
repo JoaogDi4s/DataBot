@@ -7,22 +7,25 @@ public class EnderecoCRUD implements CRUD {
     Mensagens msg = new Mensagens();
     FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
+    public void consultar() {
+        // não tem como consultar endereço
+    }
+
     public void criar() {
         boolean continuarEndereco = true;
 
         while (continuarEndereco) {
-            System.out.println("Qual o a rua?");
+            System.out.println("Qual a rua?");
             String enderecoRua = scan.nextLine();
-            System.out.println("Qual número?");
+            System.out.println("Qual o número?");
             String enderecoNumero = scan.nextLine();
             System.out.println("Qual o bairro?");
             String enderecoBairro = scan.nextLine();
-            System.out.println("QUal complemento? [nullable]");
+            System.out.println("Qual o complemento? [nullable]");
             String enderecoComplemento = scan.nextLine();
 
-            if (enderecoComplemento.isBlank()) { // Verifica se a entrada está vazia ou contém
-                                                 // apenas espaços
-                enderecoComplemento = null; // Define como null
+            if (enderecoComplemento.isBlank()) {
+                enderecoComplemento = null; 
             }
             System.out.println("Qual o CEP?");
             String enderecoCEP = scan.nextLine();
@@ -40,29 +43,29 @@ public class EnderecoCRUD implements CRUD {
             String resposta = InputUtils.getInput(scan);
 
             if (!resposta.equals("sair")) {
+                System.out.println(msg.operacaoEncerrada());
                 continuarEndereco = false;
                 break;
             }
         }
     }
 
-    public void consultar() {
-        // não tem como consultar endereço
-    }
-
     public void atualizar() {
-        System.out.println();
+        System.out.println(msg.atualizarEnd1());
         Integer escolhaEndereco = scan.nextInt();
         Endereco enderecoBuscado = enderecoDAO.buscarPorCodigo(escolhaEndereco);
 
         if (enderecoBuscado != null) {
-            System.out.println(msg.separadorEmcima());
-            System.out.println(msg.endEncontrado());
-            System.out.println(msg.separadorEmbaixo());
             boolean escolhaAtualizarEndereco = true;
             while (escolhaAtualizarEndereco) {
+                System.out.println(msg.separadorEmcima());
+                System.out.println(msg.endEncontrado());
+                System.out.println(msg.separadorEmbaixo());
+                System.out.println(msg.opAlterar());
                 String respostaAtualizarEndereco = InputUtils.getInput(scan);
+
                 switch (respostaAtualizarEndereco) {
+                    case "4":
                     case "rua":
                         System.out.println("Qual será a nova rua?");
                         String novaRua = InputUtils.getInput(scan);
@@ -70,20 +73,23 @@ public class EnderecoCRUD implements CRUD {
                         enderecoBuscado.setRua(novaRua);
                         enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                         break;
+                    case "1":
                     case "numero":
                         System.out.println("Qual será o novo número?");
-                        String novoNunero = InputUtils.getInput(scan);
-
-                        enderecoBuscado.setNumero(novoNunero);
-                        enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
-                        break;
-                    case "bairro":
-                        System.out.println("Qual será o novo bairro?");
                         String novoNumero = InputUtils.getInput(scan);
 
                         enderecoBuscado.setNumero(novoNumero);
                         enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                         break;
+                    case "2":
+                    case "bairro":
+                        System.out.println("Qual será o novo bairro?");
+                        String novoBairro = InputUtils.getInput(scan);
+
+                        enderecoBuscado.setBairro(novoBairro);
+                        enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
+                        break;
+                    case "5":
                     case "complemento":
                         System.out.println("Qual será o novo complemento?");
                         String novoComplemento = InputUtils.getInput(scan);
@@ -91,6 +97,7 @@ public class EnderecoCRUD implements CRUD {
                         enderecoBuscado.setComplemento(novoComplemento);
                         enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                         break;
+                    case "3":
                     case "cep":
                         System.out.println("Qual será o novo CEP?");
                         String NovoCEP = InputUtils.getInput(scan);
@@ -99,6 +106,7 @@ public class EnderecoCRUD implements CRUD {
                         enderecoDAO.atualizar(escolhaEndereco, enderecoBuscado);
                         break;
                     case "sair":
+                        System.out.println(msg.operacaoEncerrada());
                         escolhaAtualizarEndereco = false;
                         break;
                     default:
@@ -107,7 +115,7 @@ public class EnderecoCRUD implements CRUD {
                 }
             }
         } else {
-            System.out.println(msg.endNaoEncontrado());
+            System.out.println(msg.endNaoEncontrado() + "Tente novamente.");
         }
     }
 
@@ -120,18 +128,19 @@ public class EnderecoCRUD implements CRUD {
 
             Funcionario funcionarioBuscado = funcionarioDAO.buscarPorCpf(funcionarioCpf);
             if (funcionarioBuscado != null) {
+                System.out.println(msg.separadorEmcima());
                 System.out.println("Funcionário encontrado: " + funcionarioBuscado.getNome());
+                System.out.println("Código endereço: " + funcionarioBuscado.getCod_endereco());
+                System.out.println(msg.separadorEmbaixo());
                 System.out.println(msg.deletarCampo());
                 String confirmacao = InputUtils.getInput(scan).toLowerCase();
 
                 if (confirmacao.equals("sim")) {
-                    enderecoDAO.deletar(funcionarioCpf); // Método no DAO para deletar o
-                                                         // endereço
-                    System.out.println("Endereço" + msg.campoDeletado());
-                    enderecoEncontrado = true; // Encerra o loop
+                    enderecoDAO.deletar(funcionarioCpf);
+                    enderecoEncontrado = true; 
                 } else if (confirmacao.equals("nao")) {
                     System.out.println(msg.operacaoCancelada());
-                    enderecoEncontrado = true; // Encerra o loop
+                    enderecoEncontrado = true; 
                 } else {
                     System.out.println(msg.respInvalida());
                 }
