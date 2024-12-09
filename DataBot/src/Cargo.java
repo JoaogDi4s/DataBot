@@ -52,4 +52,3 @@ public class Cargo{
         this.cod_setor = cod_setor;
     }
     
-}

@@ -29,8 +29,7 @@ public class Endereco {
     }
     public String getComplemento() {
         return complemento;
-    }
-
+      
     //SETTERS
     public void setNumero(String numero) {
         this.numero = numero;
@@ -48,3 +47,4 @@ public class Endereco {
         this.complemento = complemento;
     }       
 }
+
