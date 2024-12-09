@@ -30,4 +30,26 @@ public class Cargo{
     public String getCod_setor(){
         return cod_setor;
     }
+
+    //SETTERS
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setSalarioBase(String salarioBase) {
+        this.salarioBase = salarioBase;
+    }
+
+    public void setHierarquia(String hierarquia) {
+        this.hierarquia = hierarquia;
+    }
+
+    public void setRequisitos(String requisitos) {
+        this.requisitos = requisitos;
+    }
+
+    public void setCod_setor(String cod_setor) {
+        this.cod_setor = cod_setor;
+    }
+    
 }

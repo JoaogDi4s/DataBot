@@ -30,4 +30,20 @@ public class Endereco {
     public String getComplemento() {
         return complemento;
     }   
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }       
 }
+
